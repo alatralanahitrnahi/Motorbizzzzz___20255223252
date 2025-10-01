@@ -1,66 +1,82 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Still writing job details on paper? It's 2025.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Monitorbizz helps small manufacturers replace clipboards, notebooks, and messy Excel sheets — with a simple app that fits on your phone.**
 
-## About Laravel
+Imagine never losing track of which machine did what job. Never guessing how much material you actually used. Never wondering why your costs keep rising.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## One Registration. Your Own Space.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Sign up once → Get `yourworkshop.monitorbizz.com`  
+Add your team with roles that make sense:
+- **Owner** - See everything, control everything
+- **Machinist** - Log jobs, report issues  
+- **Inventory Clerk** - Track materials, update stock
+- **Sales Person** - Create quotes, manage orders
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Each person sees only what they need. No confusion.
 
-## Learning Laravel
+## What Every Shop Needs
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**📦 Items & Products** - List your raw materials, finished goods, spare parts  
+**🛒 Purchase Orders** - Order steel, wood, paint, screws digitally  
+**📄 Invoices & Quotes** - Bill customers, send professional quotes  
+**💰 Payments** - Track cash, UPI, bank deposits in one place  
+**📊 Dashboard** - See sales, stock, pending work at a glance  
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## What Makers Actually Struggle With
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**🏭 Machines** - Register every machine: CNC, lathe, welding setup, injection molder  
+**⚙️ Machine Logs** - "Job #2025-001 ran on CNC-02 from 9:15 AM to 2:30 PM, operated by Ravi"  
+**🧪 Material Use** - "This job used 2.3kg Mild Steel + 1.5L Paint" — no more guessing  
+**📉 Waste Tracking** - "5% scrap on Batch #X" — see where money disappears  
+**📋 Work Orders** - Digital job cards. No more lost paper slips  
+**📦 Batch Tracking** - Know which material batch went into which product  
+**🔧 Maintenance** - "Clean CNC filter every 40 hours" — automatic reminders  
+**📏 Yield Calculator** - "92 good pieces out of 100 → 92% yield"  
 
-## Laravel Sponsors
+## Real Stories
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+*"Raj's Metal Workshop used to lose 3 hours a week finding which machine did Job #45. Now they log it in 3 taps."*
 
-### Premium Partners
+*"Priya's Furniture Shop didn't know why their plywood costs were rising — until Monitorbizz showed 18% waste on cutting tables."*
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+*"Kumar's Auto Garage stopped writing service details on paper. Now they can find any job from 6 months ago in 10 seconds."*
 
-## Contributing
+## Start Small. Grow Smart.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Begin with just "Items" and "Work Orders."  
+Add "Machines" when you're ready.  
+Add "Material Tracking" when costs matter more.  
 
-## Code of Conduct
+One click to add features. No training needed.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Zoho helps retailers. Monitorbizz helps makers.
 
-## Security Vulnerabilities
+Built for workshops, not offices.  
+Made for hands that work with tools, not keyboards.  
+Designed for businesses that make things, not just sell them.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## Installation (For Developers)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+git clone <repository-url>
+cd Motorbizzzzz
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+npm run build
+php artisan serve
+```
+
+**Tech Stack:** Laravel 10.x, MySQL, Bootstrap
+
+---
+
+**Stop writing. Start knowing.**  
+**One sign-up. Your tools. Your pace.**
+
+MIT License
