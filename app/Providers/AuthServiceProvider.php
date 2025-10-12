@@ -57,6 +57,76 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('admin-only', function (User $user) {
             return $user->role === 'admin';
         });
+
+        // Module-based permission gates
+        Gate::define('view-users', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('user_management');
+        });
+
+        Gate::define('view-warehouses', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('warehouse_management');
+        });
+
+        Gate::define('view-warehouse-blocks', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('view_blocks');
+        });
+
+        Gate::define('view-materials', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('materials');
+        });
+
+        Gate::define('view-vendors', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('vendor_management');
+        });
+
+        Gate::define('view-purchase-orders', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('purchase_orders');
+        });
+
+        Gate::define('view-inventory', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('inventory_control');
+        });
+
+        Gate::define('view-barcodes', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('barcode_management');
+        });
+
+        Gate::define('view-quality', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('quality_analysis');
+        });
+
+        Gate::define('view-reports', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('report_analysis');
+        });
+
+        // Edit permissions
+        Gate::define('edit-materials', function (User $user) {
+            return $user->isAdmin() || $user->canEditModule('materials');
+        });
+
+        Gate::define('edit-vendors', function (User $user) {
+            return $user->isAdmin() || $user->canEditModule('vendor_management');
+        });
+
+        Gate::define('edit-purchase-orders', function (User $user) {
+            return $user->isAdmin() || $user->canEditModule('purchase_orders');
+        });
+
+        Gate::define('edit-inventory', function (User $user) {
+            return $user->isAdmin() || $user->canEditModule('inventory_control');
+        });
+
+        Gate::define('edit-warehouses', function (User $user) {
+            return $user->isAdmin() || $user->canEditModule('warehouse_management');
+        });
+
+        Gate::define('edit-barcodes', function (User $user) {
+            return $user->isAdmin() || $user->canEditModule('barcode_management');
+        });
+
+        Gate::define('edit-quality', function (User $user) {
+            return $user->isAdmin() || $user->canEditModule('quality_analysis');
+        });
       
   
 }

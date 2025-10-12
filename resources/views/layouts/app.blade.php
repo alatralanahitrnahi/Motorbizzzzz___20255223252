@@ -147,14 +147,13 @@ body.user-role.no-delete-vendors form[action*="vendors"][action*="destroy"] { di
             </li>
 
             @auth
+                {{-- SIMPLIFIED PERMISSION-BASED NAVIGATION --}}
                 @php
                     $user = Auth::user();
-                    $role = $user->role;
-                    $permissions = $user->permissions ?? []; // Assumes this returns an array like: ['materials' => ['can_view' => true], ...]
                 @endphp
 
-                {{-- ADMIN ROLE - Show all modules --}}
-                @if ($user->isAdmin())
+                {{-- User Management --}}
+                @can('view-users')
                     <li class="nav-item">
                         <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">ADMINISTRATION</h6>
                     </li>
@@ -163,169 +162,106 @@ body.user-role.no-delete-vendors form[action*="vendors"][action*="destroy"] { di
                             <i class="fas fa-users-cog"></i> User Management
                         </a>
                     </li>
+                @endcan
+
+                {{-- Warehouse Management --}}
+                @can('view-warehouses')
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('dashboard.warehouses.*') ? 'active' : '' }}" href="{{ route('dashboard.warehouses.index') }}">
                             <i class="fas fa-warehouse"></i> Warehouse Management
                         </a>
                     </li>
+                @endcan
+
+                {{-- Warehouse Blocks --}}
+                @can('view-warehouse-blocks')
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('warehouses.blocks.*') ? 'active' : '' }}" href="{{ route('warehouses.blocks.all') }}">
                             <i class="fas fa-th-large"></i> View Blocks
                         </a>
                     </li>
+                @endcan
+
+                {{-- Materials --}}
+                @can('view-materials')
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('materials.*') ? 'active' : '' }}" href="{{ route('materials.index') }}">
                             <i class="fas fa-cube"></i> Materials
                         </a>
                     </li>
+                @endcan
+
+                {{-- Vendors --}}
+                @can('view-vendors')
+                    @if(!isset($procurement_section))
+                        <li class="nav-item">
+                            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">PROCUREMENT</h6>
+                        </li>
+                        @php $procurement_section = true; @endphp
+                    @endif
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('vendors.*') ? 'active' : '' }}" href="{{ route('vendors.index') }}">
                             <i class="fas fa-truck"></i> Vendor Management
                         </a>
                     </li>
+                @endcan
+
+                {{-- Purchase Orders --}}
+                @can('view-purchase-orders')
+                    @if(!isset($procurement_section))
+                        <li class="nav-item">
+                            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">PROCUREMENT</h6>
+                        </li>
+                        @php $procurement_section = true; @endphp
+                    @endif
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('purchase-orders.*') ? 'active' : '' }}" href="{{ route('purchase-orders.index') }}">
                             <i class="fas fa-shopping-cart"></i> Purchase Orders
                         </a>
                     </li>
+                @endcan
+
+                {{-- Inventory --}}
+                @can('view-inventory')
+                    @if(!isset($inventory_section))
+                        <li class="nav-item">
+                            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">INVENTORY</h6>
+                        </li>
+                        @php $inventory_section = true; @endphp
+                    @endif
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('inventory.*') ? 'active' : '' }}" href="{{ route('inventory.index') }}">
                             <i class="fas fa-boxes"></i> Inventory Management
                         </a>
                     </li>
+                @endcan
+
+                {{-- Barcode Management --}}
+                @can('view-barcodes')
+                    @if(!isset($inventory_section))
+                        <li class="nav-item">
+                            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">INVENTORY</h6>
+                        </li>
+                        @php $inventory_section = true; @endphp
+                    @endif
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('barcode.*') ? 'active' : '' }}" href="{{ route('barcode.dashboard') }}">
                             <i class="fas fa-qrcode"></i> Barcode Management
                         </a>
                     </li>
+                @endcan
+
+                {{-- Quality Analysis --}}
+                @can('view-quality')
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('quality-analysis.*') ? 'active' : '' }}" href="{{ route('quality-analysis.index') }}">
                             <i class="fas fa-check-circle"></i> Quality Analysis
                         </a>
                     </li>
-                @endif
+                @endcan
 
-                {{-- PURCHASE TEAM ROLE - Show only purchase orders --}}
-                @if ($role === 'purchase_team')
-                    <li class="nav-item">
-                        <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">PURCHASING</h6>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('purchase-orders.*') ? 'active' : '' }}" href="{{ route('purchase-orders.index') }}">
-                            <i class="fas fa-shopping-cart"></i> Purchase Orders
-                        </a>
-                    </li>
-                @endif
-
-                {{-- INVENTORY MANAGER ROLE - Show only inventory control and barcode management --}}
-                @if ($role === 'inventory_manager')
-                    <li class="nav-item">
-                        <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">INVENTORY</h6>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('inventory.*') ? 'active' : '' }}" href="{{ route('inventory.index') }}">
-                            <i class="fas fa-boxes"></i> Inventory Control
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('barcode.*') ? 'active' : '' }}" href="{{ route('barcode.dashboard') }}">
-                            <i class="fas fa-qrcode"></i> Barcode Management
-                        </a>
-                    </li>
-                @endif
-
-                {{-- USER ROLE - Show only modules with permissions --}}
-                @if ($role === 'user')
-      @php
-    $user = Auth::user();
-    $userPermissions = [];
-
-    if ($user) {
-        $userPermissions = DB::table('permissions')
-            ->join('modules', 'permissions.module_id', '=', 'modules.id')
-            ->where('permissions.user_id', $user->id)
-            ->where('permissions.can_view', 1)
-            ->where('modules.is_active', 1)
-            ->select('modules.id', 'modules.name', 'modules.route', 'modules.icon')
-            ->get();
-    }
-@endphp
-
-
-                    @if ($userPermissions->count() > 0)
-                        <li class="nav-item">
-                            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">MODULES</h6>
-                        </li>
-
-                        @foreach ($userPermissions as $module)
-                            @if ($module->id == 1) {{-- User Management --}}
-                                <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}" href="{{ route('admin.users') }}">
-                                        <i class="{{ $module->icon }}"></i> {{ $module->name }}
-                                    </a>
-                                </li>
-                            @elseif ($module->id == 2) {{-- Warehouse Management --}}
-                                <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('dashboard.warehouses.*') ? 'active' : '' }}" href="{{ route('dashboard.warehouses.index') }}">
-                                        <i class="{{ $module->icon }}"></i> {{ $module->name }}
-                                    </a>
-                                </li>
-                            @elseif ($module->id == 3) {{-- View Blocks --}}
-                                <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('warehouses.blocks.*') ? 'active' : '' }}" href="{{ route('warehouses.blocks.all') }}">
-                                        <i class="{{ $module->icon }}"></i> {{ $module->name }}
-                                    </a>
-                                </li>
-                            @elseif ($module->id == 4) {{-- Materials --}}
-                                <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('materials.*') ? 'active' : '' }}" href="{{ route('materials.index') }}">
-                                        <i class="{{ $module->icon }}"></i> {{ $module->name }}
-                                    </a>
-                                </li>
-                            @elseif ($module->id == 5) {{-- Vendor Management --}}
-                                <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('vendors.*') ? 'active' : '' }}" href="{{ route('vendors.index') }}">
-                                        <i class="{{ $module->icon ?? 'fas fa-circle' }}"></i> {{ $module->name }}
-
-                                    </a>
-                                </li>
-                            @elseif ($module->id == 6) {{-- Quality Analysis --}}
-                                <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('quality-analysis.*') ? 'active' : '' }}" href="{{ route('quality-analysis.index') }}">
-                                        <i class="{{ $module->icon }}"></i> {{ $module->name }}
-                                    </a>
-                                </li>
-                            @elseif ($module->id == 7) {{-- Purchase Orders --}}
-                                <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('purchase-orders.*') ? 'active' : '' }}" href="{{ route('purchase-orders.index') }}">
-                                        <i class="{{ $module->icon }}"></i> {{ $module->name }}
-                                    </a>
-                                </li>
-                            @elseif ($module->id == 8) {{-- Inventory Controls --}}
-                                <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('inventory.*') ? 'active' : '' }}" href="{{ route('inventory.index') }}">
-                                        <i class="{{ $module->icon }}"></i> {{ $module->name }}
-                                    </a>
-                                </li>
-                            @elseif ($module->id == 9) {{-- Barcode Management --}}
-                                <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('barcode.*') ? 'active' : '' }}" href="{{ route('barcode.dashboard') }}">
-                                        <i class="{{ $module->icon }}"></i> {{ $module->name }}
-                                    </a>
-                                </li>
-                            @elseif ($module->id == 10) {{-- Report Analysis --}}
-                                <li class="nav-item">
-                                    <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}">
-                                        <i class="{{ $module->icon }}"></i> {{ $module->name }}
-                                    </a>
-                                </li>
-                            @endif
-                        @endforeach
-                    @endif
-                @endif
-
-                {{-- Reports (visible to all authenticated users, but check permissions for regular users) --}}
-                @if ($role !== 'user')
+                {{-- Reports --}}
+                @can('view-reports')
                     <li class="nav-item">
                         <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">REPORTS</h6>
                     </li>
@@ -334,27 +270,7 @@ body.user-role.no-delete-vendors form[action*="vendors"][action*="destroy"] { di
                             <i class="fas fa-file-alt"></i> Reports & Analytics
                         </a>
                     </li>
-                @else
-                    {{-- For users, check if they have permission to view reports --}}
-                    @php
-                        $hasReportPermission = DB::table('permissions')
-                            ->where('user_id', $user->id)
-                            ->where('module_id', 10) // Report Analysis module
-                            ->where('can_view', 1)
-                            ->exists();
-                    @endphp
-                    
-                    @if ($hasReportPermission)
-                        <li class="nav-item">
-                            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">REPORTS</h6>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}">
-                                <i class="fas fa-file-alt"></i> Reports & Analytics
-                            </a>
-                        </li>
-                    @endif
-                @endif
+                @endcan
             @endauth
         </ul>
     </div>

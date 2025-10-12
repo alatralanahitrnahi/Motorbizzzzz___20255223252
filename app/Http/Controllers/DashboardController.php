@@ -76,122 +76,19 @@ class DashboardController extends Controller
         }
     }
 
-    /** Get navigation items based on user permissions */
+    /** Get navigation items based on user permissions - SIMPLIFIED */
     private function getNavigationItems($user): array
     {
-        $navigation = [
+        // Navigation is now handled by Gates in the view
+        // This method is kept for backward compatibility
+        return [
             'dashboard' => [
                 'title' => 'Dashboard',
                 'icon' => 'fas fa-tachometer-alt',
                 'route' => 'dashboard',
                 'active' => true,
             ],
-            'reports' => [
-                'title' => 'Reports & Analytics',
-                'icon' => 'fas fa-file-alt',
-                'route' => 'reports.index',
-                'section' => 'Reports',
-            ],
         ];
-
-        // Define all module navigation configurations with correct route names
-        $moduleNavigationMap = [
-            'user_management' => [
-                'title' => 'User Management',
-                'icon' => 'fas fa-users-cog',
-                'route' => 'admin.users',
-                'section' => 'Administration',
-            ],
-            'warehouse_management' => [
-                'title' => 'Warehouse Management',
-                'icon' => 'fas fa-warehouse',
-                'route' => 'dashboard.warehouses.index',
-                'section' => 'Administration',
-            ],
-            'view_blocks' => [
-                'title' => 'View Blocks',
-                'icon' => 'fas fa-th-large',
-                'route' => 'warehouses.blocks.all',
-                'section' => 'Administration',
-            ],
-            'materials' => [
-                'title' => 'Materials',
-                'icon' => 'fas fa-cube',
-                'route' => 'materials.index',
-                'section' => 'Administration',
-            ],
-            'vendor_management' => [
-                'title' => 'Vendor Management',
-                'icon' => 'fas fa-truck',
-                'route' => 'vendors.index',
-                'section' => 'Procurement',
-            ],
-            'quality_analysis' => [
-                'title' => 'Quality Analysis',
-                'icon' => 'fas fa-check-circle',
-                'route' => 'quality-analysis.index',
-                'section' => 'Administration',
-            ],
-            'purchase_orders' => [
-                'title' => 'Purchase Orders',
-                'icon' => 'fas fa-shopping-cart',
-                'route' => 'purchase-orders.index',
-                'section' => 'Procurement',
-            ],
-            'inventory_control' => [
-                'title' => 'Inventory Control',
-                'icon' => 'fas fa-boxes',
-                'route' => 'inventory.index',
-                'section' => 'Inventory',
-            ],
-            'barcode_management' => [
-                'title' => 'Barcode Management',
-                'icon' => 'fas fa-qrcode',
-                'route' => 'barcode.dashboard',
-                'section' => 'Inventory',
-            ],
-        ];
-
-        // Admin has access to all modules
-        if ($user->isAdmin()) {
-            return array_merge($navigation, $moduleNavigationMap);
-        }
-
-        // For non-admins, load permissions and map them
-        try {
-            $userPermissions = $user->permissions()->with('module')->get();
-
-            Log::info('User permissions for ' . $user->email . ':', $userPermissions->toArray());
-
-            if ($userPermissions->isEmpty()) {
-                Log::warning('User ' . $user->email . ' has no permissions. Assigning defaults.');
-                return array_merge($navigation, $this->getDefaultNavigationForRole($user->role, $moduleNavigationMap));
-            }
-
-            foreach ($userPermissions as $permission) {
-                if ($permission->module) {
-                    $moduleName = $permission->module->name;
-                    Log::info("Processing module: $moduleName for user {$user->email}");
-
-                    if ($this->hasViewPermission($permission) && isset($moduleNavigationMap[$moduleName])) {
-                        $navItem = $moduleNavigationMap[$moduleName];
-
-                        // Add view_only flag if user can't edit
-                        if (!$this->hasEditPermission($permission)) {
-                            $navItem['view_only'] = true;
-                        }
-
-                        $navigation[$moduleName] = $navItem;
-                        Log::info("Added navigation item: $moduleName for user {$user->email}");
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            Log::error('Error retrieving user permissions: ' . $e->getMessage());
-            return array_merge($navigation, $this->getDefaultNavigationForRole($user->role, $moduleNavigationMap));
-        }
-
-        return $navigation;
     }
       
     private function getFirstWarehouseId($user)
@@ -212,45 +109,7 @@ class DashboardController extends Controller
         }
     }
 
-    /** Get default navigation items for users without specific permissions */
-    private function getDefaultNavigationForRole($role, $moduleNavigationMap): array
-    {
-        $defaultNavigation = [];
-        
-        switch ($role) {
-            case 'purchase_team':
-                $defaultNavigation = [
-                    'vendor_management' => $moduleNavigationMap['vendor_management'],
-                    'purchase_orders' => $moduleNavigationMap['purchase_orders'],
-                    'materials' => $moduleNavigationMap['materials'],
-                ];
-                break;
-                
-            case 'inventory_manager':
-                $defaultNavigation = [
-                    'inventory_control' => $moduleNavigationMap['inventory_control'],
-                    'warehouse_management' => $moduleNavigationMap['warehouse_management'],
-                    'barcode_management' => $moduleNavigationMap['barcode_management'],
-                    'materials' => $moduleNavigationMap['materials'],
-                ];
-                break;
-                
-            case 'user':
-                $defaultNavigation = [
-                    'materials' => array_merge($moduleNavigationMap['materials'], ['view_only' => true]),
-                    'inventory_control' => array_merge($moduleNavigationMap['inventory_control'], ['view_only' => true]),
-                ];
-                break;
-                
-            default:
-                // No default navigation for unknown roles
-                break;
-        }
-        
-        return $defaultNavigation;
-    }
-
-    /** Helper methods to safely check permissions */
+    /** Helper methods for permission checking - SIMPLIFIED */
     private function hasViewPermission($permission): bool
     {
         return (bool) ($permission->can_view ?? false);
