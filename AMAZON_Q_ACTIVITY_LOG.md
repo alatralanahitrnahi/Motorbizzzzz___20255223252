@@ -351,3 +351,40 @@
 - Digital job cards replace paper slips
 
 **Next Step**: Legal Invoice System
+
+#### PO-WorkOrder Integration - COMPLETED ✅
+- **Goal**: Connect Purchase Orders to Work Orders for complete material flow
+- **Solution**: Added relationships and inventory consumption tracking
+
+**Integration Points Added:**
+1. **PO → Work Order Connection**
+   - Added `workOrders()` relationship to PurchaseOrder model
+   - Added `getAvailableMaterials()` method for work order planning
+   - Show available materials in PO details when status is 'received'
+
+2. **Inventory Consumption Tracking**
+   - Added `deductFromInventory()` method to WorkOrderController
+   - FIFO (First In, First Out) inventory deduction
+   - Automatic inventory batch updates when work orders complete
+
+3. **UI Enhancements**
+   - Show "Materials Available for Work Orders" section in PO details
+   - Direct link to create work orders with received materials
+   - Visual connection between procurement and production
+
+**Complete Material Flow:**
+1. **Purchase Order** created for materials (Pending)
+2. **PO Approved** → Inventory batches auto-created
+3. **Materials Received** → Available for work orders
+4. **Work Order Created** → Plan material consumption
+5. **Work Order Completed** → Inventory automatically deducted (FIFO)
+6. **Real-time Tracking** → Know exactly what materials were used
+
+**Business Benefits:**
+- Complete traceability from purchase to production
+- Automatic inventory management (no manual tracking)
+- FIFO ensures older materials used first
+- Real-time material availability for job planning
+- Waste tracking shows where money is lost
+
+**Next Step**: Legal Invoice System (tax-compliant PDF generation)

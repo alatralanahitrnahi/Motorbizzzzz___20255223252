@@ -103,10 +103,14 @@ class WorkOrderController extends Controller
         DB::transaction(function () use ($workOrder, $validated) {
             // Update material consumptions
             foreach ($validated['materials'] as $id => $data) {
-                MaterialConsumption::where('id', $id)->update([
+                $consumption = MaterialConsumption::find($id);
+                $consumption->update([
                     'actual_quantity' => $data['actual_quantity'],
                     'waste_quantity' => $data['waste_quantity'] ?? 0,
                 ]);
+
+                // Deduct from inventory batches
+                $this->deductFromInventory($consumption->material_id, $data['actual_quantity']);
             }
 
             // Complete work order
@@ -120,5 +124,30 @@ class WorkOrderController extends Controller
         });
 
         return redirect()->route('work-orders.show', $workOrder)->with('success', 'Work order completed successfully.');
+    }
+
+    /**
+     * Deduct material from inventory batches
+     */
+    private function deductFromInventory($materialId, $quantity)
+    {
+        $batches = \App\Models\InventoryBatch::where('material_id', $materialId)
+            ->where('current_quantity', '>', 0)
+            ->orderBy('received_date', 'asc') // FIFO
+            ->get();
+
+        $remainingToDeduct = $quantity;
+
+        foreach ($batches as $batch) {
+            if ($remainingToDeduct <= 0) break;
+
+            $deductFromThisBatch = min($batch->current_quantity, $remainingToDeduct);
+            
+            $batch->update([
+                'current_quantity' => $batch->current_quantity - $deductFromThisBatch
+            ]);
+
+            $remainingToDeduct -= $deductFromThisBatch;
+        }
     }
 }

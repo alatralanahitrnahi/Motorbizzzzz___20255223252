@@ -181,6 +181,39 @@
 
 
 
+    {{-- Related Work Orders --}}
+    @if($purchaseOrder->status === 'received')
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5>Materials Available for Work Orders</h5>
+            </div>
+            <div class="card-body">
+                @if($purchaseOrder->items->count() > 0)
+                    <div class="row">
+                        @foreach($purchaseOrder->items as $item)
+                            <div class="col-md-6 mb-3">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6>{{ $item->material->name ?? $item->item_name }}</h6>
+                                        <p class="mb-1"><strong>Available:</strong> {{ $item->quantity }} {{ $item->material->unit ?? 'pcs' }}</p>
+                                        <p class="mb-0"><small class="text-muted">Ready for work orders</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="mt-3">
+                        <a href="{{ route('work-orders.create') }}" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Create Work Order with These Materials
+                        </a>
+                    </div>
+                @else
+                    <p class="text-muted">No materials available.</p>
+                @endif
+            </div>
+        </div>
+    @endif
+
     {{-- Action Buttons --}}
     <div class="mt-4 d-flex gap-2">
         <a href="{{ route('purchase-orders.index') }}" class="btn btn-secondary">

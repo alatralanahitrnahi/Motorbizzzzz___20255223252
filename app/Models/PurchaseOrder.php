@@ -103,5 +103,35 @@ public function qualityAnalysis()
     return $this->belongsTo(User::class, 'created_by');
 }
 
+    /**
+     * Work orders that used materials from this PO
+     */
+    public function workOrders()
+    {
+        return $this->hasManyThrough(
+            WorkOrder::class,
+            MaterialConsumption::class,
+            'material_id', // Foreign key on material_consumptions table
+            'id', // Foreign key on work_orders table
+            'id', // Local key on purchase_orders table
+            'work_order_id' // Local key on material_consumptions table
+        );
+    }
+
+    /**
+     * Get available materials from this PO for work orders
+     */
+    public function getAvailableMaterials()
+    {
+        return $this->items()->with('material')->get()->map(function($item) {
+            return [
+                'material_id' => $item->material_id,
+                'material_name' => $item->material->name ?? $item->item_name,
+                'available_quantity' => $item->quantity, // From inventory batches
+                'unit' => $item->material->unit ?? 'pcs',
+            ];
+        });
+    }
+
 
 }
