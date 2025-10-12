@@ -71,25 +71,31 @@ class PurchaseOrderController extends Controller
 
 public function approve(Request $request, PurchaseOrder $purchaseOrder)
 {
-    $this->authorize('approve', $purchaseOrder);
-
-    if ($purchaseOrder->status !== PurchaseOrder::STATUS_PENDING) {
+    if ($purchaseOrder->status !== 'pending') {
         return back()->with('error', 'Purchase order cannot be approved.');
     }
 
-    $purchaseOrder->update([
-        'status' => PurchaseOrder::STATUS_APPROVED,
-        'approved_by' => Auth::id(),
-        'approved_at' => now(),
-    ]);
+    DB::transaction(function () use ($purchaseOrder) {
+        // Update PO status
+        $purchaseOrder->update([
+            'status' => 'approved',
+            'approved_by' => Auth::id(),
+            'approved_at' => now(),
+        ]);
 
-    // ✅ Optional: Mark notification as read
+        // Create inventory batches for each item
+        foreach ($purchaseOrder->items as $item) {
+            $this->createInventoryBatch($purchaseOrder, $item);
+        }
+    });
+
+    // Mark notification as read
     if ($request->filled('notification_id')) {
         Auth::user()->notifications()->where('id', $request->notification_id)->first()?->markAsRead();
     }
 
     return redirect()->route('purchase-orders.show', $purchaseOrder->id)
-                     ->with('success', 'Purchase order approved.');
+                     ->with('success', 'Purchase order approved and inventory batches created.');
 }
 
    public function create()
