@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\BelongsToBusiness;
 
 /**
  * Class Material
@@ -24,6 +25,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Material extends Model
 {
+    use BelongsToBusiness;
+    
     // Protect the 'id' from mass assignment
     protected $guarded = ['id'];
 
@@ -40,7 +43,7 @@ class Material extends Model
         'category',
         'is_available',
         'dimensions',
-
+        'business_id',
     ];
 
     // Cast fields to appropriate data types

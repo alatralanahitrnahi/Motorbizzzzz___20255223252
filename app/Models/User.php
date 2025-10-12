@@ -19,6 +19,7 @@ class User extends Authenticatable
         'is_active',
         'email_verified_at',
         'notification_preferences',
+        'business_id',
     ];
 
     protected $hidden = [
@@ -144,6 +145,14 @@ class User extends Authenticatable
     public function purchaseOrders()
     {
         return $this->hasMany(PurchaseOrder::class, 'created_by');
+    }
+
+    /**
+     * Relationship: Business this user belongs to
+     */
+    public function business()
+    {
+        return $this->belongsTo(Business::class);
     }
   
     public function warehouses()

@@ -4,17 +4,18 @@ namespace App\Models;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\BelongsToBusiness;
 
 class PurchaseOrder extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToBusiness;
 
     protected $fillable = [
         'vendor_id',
         'po_date',
         'order_date',
-      'po_number',
-      'created_by',
+        'po_number',
+        'created_by',
         'expected_delivery',
         'shipping_address',
         'status',
@@ -22,6 +23,7 @@ class PurchaseOrder extends Model
         'total_amount',
         'gst_amount',
         'final_amount',
+        'business_id',
     ];
   
   protected $casts = [
