@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Models\{PurchaseOrder, PurchaseOrderItem, Vendor, Material};
+use App\Models\{PurchaseOrder, PurchaseOrderItem, Vendor, Material, InventoryBatch, Warehouse};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{DB, Cache, Log, Auth};
 use Illuminate\Validation\Rule;
@@ -542,4 +542,34 @@ public function show($id)
 
     return $pdf->download("PurchaseOrder_{$purchaseOrder->po_number}.pdf");
 }
+
+    /**
+     * Create inventory batch when PO is approved
+     */
+    private function createInventoryBatch(PurchaseOrder $purchaseOrder, $item)
+    {
+        // Generate batch number
+        $batchNumber = 'BATCH-' . now()->format('Ymd') . '-' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT);
+        
+        // Get first available warehouse
+        $warehouseId = \App\Models\Warehouse::first()?->id ?? 1;
+        
+        \App\Models\InventoryBatch::create([
+            'batch_number' => $batchNumber,
+            'purchase_order_id' => $purchaseOrder->id,
+            'material_id' => $item->material_id,
+            'warehouse_id' => $warehouseId,
+            'ordered_quantity' => $item->quantity,
+            'received_quantity' => $item->quantity,
+            'current_quantity' => $item->quantity,
+            'remaining_quantity' => $item->quantity,
+            'unit_price' => $item->unit_price,
+            'received_by' => Auth::id(),
+            'received_date' => now(),
+            'status' => 'received',
+            'notes' => "Auto-created from PO approval: {$purchaseOrder->po_number}",
+        ]);
+        
+        Log::info("Inventory batch created for PO {$purchaseOrder->po_number}, Material ID: {$item->material_id}, Quantity: {$item->quantity}");
+    }
 }
