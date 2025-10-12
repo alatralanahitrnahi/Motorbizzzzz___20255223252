@@ -46,7 +46,7 @@ class InventoryController extends Controller
         $batches = $query->latest('created_at')->paginate(15);
 
         $materials = Material::query()
-            ->where('is_available', 1)
+            ->where('is_available', true)
             ->orderBy('name')
             ->get();
 
@@ -78,7 +78,7 @@ public function create(Request $request)
 
     // ✅ Load full warehouse info (capacity, current_load, etc.)
     $warehouses = Warehouse::select('id', 'name', 'capacity', 'current_load', 'available_space')
-        ->where('is_active', 1)
+        ->where('is_active', true)
         ->orderBy('name')
         ->get();
 

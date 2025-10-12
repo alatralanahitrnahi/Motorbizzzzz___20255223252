@@ -290,6 +290,21 @@ body.user-role.no-delete-vendors form[action*="vendors"][action*="destroy"] { di
                     </li>
                 @endcan
 
+                {{-- Invoices --}}
+                @can('view-invoices')
+                    @if(!isset($billing_section))
+                        <li class="nav-item">
+                            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">BILLING</h6>
+                        </li>
+                        @php $billing_section = true; @endphp
+                    @endif
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('invoices.*') ? 'active' : '' }}" href="{{ route('invoices.index') }}">
+                            <i class="fas fa-file-invoice-dollar"></i> Invoices
+                        </a>
+                    </li>
+                @endcan
+
                 {{-- Reports --}}
                 @can('view-reports')
                     <li class="nav-item">

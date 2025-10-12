@@ -19,7 +19,7 @@ class CleanOrphanNotifications extends Command
         foreach ($notifications as $notification) {
             $data = is_string($notification->data) ? json_decode($notification->data, true) : $notification->data;
             if (isset($data['purchase_order_id']) &&
-                !PurchaseOrder::withTrashed()->find($data['purchase_order_id'])) {
+                !PurchaseOrder::withTrashed()->where('id', $data['purchase_order_id'])->exists()) {
                 $notification->delete();
                 $deletedCount++;
             }

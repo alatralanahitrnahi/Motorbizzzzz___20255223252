@@ -174,7 +174,7 @@ class User extends Authenticatable
                 $query->where('name', $moduleName)
                       ->where('is_active', 1);
             })
-            ->where($permissionType, 1)
+            ->where($permissionType, true)
             ->exists();
     }
 
@@ -266,7 +266,7 @@ public function canEditModule($moduleName)
 
     return $this->permissions()
         ->where('module_id', $moduleId)
-        ->where($column, 1)
+        ->where($column, true)
         ->exists();
 }
 

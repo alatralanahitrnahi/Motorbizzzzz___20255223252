@@ -185,6 +185,19 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/{workOrder}/start', [\App\Http\Controllers\WorkOrderController::class, 'start'])->name('start');
         Route::post('/{workOrder}/complete', [\App\Http\Controllers\WorkOrderController::class, 'complete'])->name('complete');
     });
+    
+    // Invoices
+    Route::prefix('invoices')->name('invoices.')->middleware('can:view-invoices')->group(function () {
+        Route::get('/', [\App\Http\Controllers\InvoiceController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\InvoiceController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\InvoiceController::class, 'store'])->name('store');
+        Route::get('/{invoice}', [\App\Http\Controllers\InvoiceController::class, 'show'])->name('show');
+        Route::get('/{invoice}/edit', [\App\Http\Controllers\InvoiceController::class, 'edit'])->name('edit');
+        Route::put('/{invoice}', [\App\Http\Controllers\InvoiceController::class, 'update'])->name('update');
+        Route::delete('/{invoice}', [\App\Http\Controllers\InvoiceController::class, 'destroy'])->name('destroy');
+        Route::get('/{invoice}/pdf', [\App\Http\Controllers\InvoiceController::class, 'downloadPdf'])->name('pdf');
+        Route::post('/{invoice}/mark-paid', [\App\Http\Controllers\InvoiceController::class, 'markAsPaid'])->name('mark-paid');
+    });
 });
 
 // Fallback route for 404 errors

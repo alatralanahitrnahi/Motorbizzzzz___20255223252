@@ -74,9 +74,9 @@ class MaterialController extends Controller
         }
 
         $materials = Material::where(function($q) use ($query) {
-            $q->where('name', 'LIKE', "%{$query}%")
-              ->orWhere('code', 'LIKE', "%{$query}%")
-              ->orWhere('sku', 'LIKE', "%{$query}%")
+            $q->where('name', 'LIKE', '%' . $query . '%')
+              ->orWhere('code', 'LIKE', '%' . $query . '%')
+              ->orWhere('sku', 'LIKE', '%' . $query . '%')
               ->orWhere('barcode', $query);
         })
         ->select('id', 'name', 'code', 'sku', 'barcode', 'unit', 'unit_price', 'is_available', 'dimensions')

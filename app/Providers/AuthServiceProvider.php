@@ -144,6 +144,23 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('edit-work-orders', function (User $user) {
             return $user->isAdmin() || $user->canEditModule('work_orders');
         });
+
+        // Invoice permissions
+        Gate::define('view-invoices', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('invoices');
+        });
+
+        Gate::define('create-invoices', function (User $user) {
+            return $user->isAdmin() || $user->canEditModule('invoices');
+        });
+
+        Gate::define('edit-invoices', function (User $user) {
+            return $user->isAdmin() || $user->canEditModule('invoices');
+        });
+
+        Gate::define('delete-invoices', function (User $user) {
+            return $user->isAdmin() || $user->canEditModule('invoices');
+        });
       
   
 }
