@@ -219,3 +219,36 @@
 - Complete audit trail from PO to inventory batches
 - Workshop owners can immediately see received materials
 - Ready for next fix: Material stock validation
+
+#### Material Stock Validation + N+1 Query Fix - COMPLETED ✅
+- **Problem 1**: Users could order more materials than available in stock
+- **Problem 2**: Purchase Orders index page had N+1 query performance issues
+- **Solution**: Enhanced validation logic and optimized database queries
+
+**Files Modified:**
+1. **`app/Http/Controllers/PurchaseOrderController.php`**
+   - Fixed N+1 query in `index()` method with proper eager loading
+   - Enhanced `validateMaterialQuantities()` with batch loading
+   - Improved `calculateRemainingQuantity()` with optimized JOIN query
+   - Better error messages showing available vs ordered quantities
+
+**Technical Improvements:**
+- ✅ **N+1 Query Fix**: Added `items.material` eager loading to index
+- ✅ **Batch Validation**: Load all materials and vendors in single queries
+- ✅ **Optimized Calculation**: Use JOIN instead of whereHas for remaining qty
+- ✅ **Better Error Messages**: Show "Only X units available (Total: Y, Already ordered: Z)"
+- ✅ **Validation Logic**: Check against remaining quantity, not just total stock
+
+**Business Impact:**
+- Users can't over-order materials beyond available stock
+- Clear error messages help users understand availability
+- Purchase Orders index loads faster with fewer database queries
+- System prevents inventory conflicts and overselling
+- Workshop owners get accurate stock information
+
+**Performance:**
+- Index page: Reduced from N+1 queries to 3 optimized queries
+- Validation: Batch loading instead of individual lookups
+- Remaining quantity calculation: Single JOIN query vs multiple subqueries
+
+**Next Priority**: Multi-tenancy implementation (business separation)

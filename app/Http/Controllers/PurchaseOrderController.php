@@ -40,7 +40,8 @@ class PurchaseOrderController extends Controller
     {
         $query = PurchaseOrder::with([
             'vendor:id,name,business_name',
-            'items:id,purchase_order_id,item_name,quantity'
+            'items:id,purchase_order_id,item_name,quantity,material_id',
+            'items.material:id,name,code'
         ])->select([
             'id', 'po_number', 'vendor_id', 'po_date', 'order_date',
             'expected_delivery', 'total_amount', 'gst_amount',
@@ -328,17 +329,15 @@ public function show($id)
 
         $availableQty = $materialVendor->quantity;
 
-        // Calculate total ordered quantity for this material from this vendor
-        $orderedQty = \App\Models\PurchaseOrderItem::whereHas('purchaseOrder', function ($query) use ($vendorId, $excludeOrderId) {
-            $query->where('vendor_id', $vendorId)
-                  ->whereNotIn('status', ['cancelled', 'rejected', 'completed']);
-            
-            // Exclude current order if provided (for updates)
-            if ($excludeOrderId) {
-                $query->where('id', '!=', $excludeOrderId);
-            }
-        })->where('material_id', $materialId)
-          ->sum('quantity');
+        // Calculate total ordered quantity for this material from this vendor (optimized query)
+        $orderedQty = \App\Models\PurchaseOrderItem::join('purchase_orders', 'purchase_order_items.purchase_order_id', '=', 'purchase_orders.id')
+            ->where('purchase_orders.vendor_id', $vendorId)
+            ->where('purchase_order_items.material_id', $materialId)
+            ->whereNotIn('purchase_orders.status', ['cancelled', 'rejected', 'completed'])
+            ->when($excludeOrderId, function ($query) use ($excludeOrderId) {
+                return $query->where('purchase_orders.id', '!=', $excludeOrderId);
+            })
+            ->sum('purchase_order_items.quantity');
 
         return max(0, $availableQty - $orderedQty);
     }
@@ -369,30 +368,43 @@ public function show($id)
     $errors = [];
     $vendorId = request()->input('vendor_id');
 
+    // Eager load materials and material_vendors to avoid N+1
+    $materialIds = array_column($items, 'material_id');
+    $materials = Material::whereIn('id', $materialIds)->get()->keyBy('id');
+    $materialVendors = \App\Models\MaterialVendor::where('vendor_id', $vendorId)
+        ->whereIn('material_id', $materialIds)
+        ->get()
+        ->keyBy('material_id');
+
     foreach ($items as $index => $item) {
         $materialId = $item['material_id'];
         $requestedQty = $item['quantity'];
 
-        // Fetch stock from material_vendor
-        $materialVendor = \App\Models\MaterialVendor::where('material_id', $materialId)
-            ->where('vendor_id', $vendorId)
-            ->first();
+        // Check if material exists
+        $material = $materials->get($materialId);
+        if (!$material) {
+            $errors["items.{$index}.material_id"] = "Material not found.";
+            continue;
+        }
 
+        // Check if vendor has this material
+        $materialVendor = $materialVendors->get($materialId);
         if (!$materialVendor) {
-            $errors["items.{$index}.material_id"] = "Material not found for selected vendor.";
+            $errors["items.{$index}.material_id"] = "Material '{$material->name}' not available from selected vendor.";
             continue;
         }
 
         $availableQty = $materialVendor->quantity;
+        $remainingQty = $this->calculateRemainingQuantity($materialId, $vendorId);
 
-        // Get material name for better messages
-        $material = \App\Models\Material::find($materialId);
-        $materialName = $material ? $material->name : "Material ID {$materialId}";
+        // Validate against remaining quantity (not just available)
+        if ($requestedQty > $remainingQty) {
+            $errors["items.{$index}.quantity"] = "Only {$remainingQty} units of '{$material->name}' available (Total: {$availableQty}, Already ordered: " . ($availableQty - $remainingQty) . ").";
+        }
 
-        \Log::info("🧮 Validation — Material: {$materialName}, Vendor: {$vendorId}, Available: {$availableQty}, Requested: {$requestedQty}");
-
-        if ($requestedQty > $availableQty) {
-            $errors["items.{$index}.quantity"] = "Requested quantity ({$requestedQty}) for {$materialName} exceeds available quantity ({$availableQty}).";
+        // Validate minimum quantity
+        if ($requestedQty <= 0) {
+            $errors["items.{$index}.quantity"] = "Quantity must be greater than 0.";
         }
     }
 
