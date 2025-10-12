@@ -20,6 +20,8 @@ class ModuleSeeder extends Seeder
             ['name' => 'inventory_control', 'display_name' => 'Inventory Control', 'icon' => 'fas fa-boxes', 'is_active' => true],
             ['name' => 'barcode_management', 'display_name' => 'Barcode Management', 'icon' => 'fas fa-qrcode', 'is_active' => true],
             ['name' => 'report_analysis', 'display_name' => 'Report Analysis', 'icon' => 'fas fa-file-alt', 'is_active' => true],
+            ['name' => 'machines', 'display_name' => 'Machines', 'icon' => 'fas fa-cogs', 'is_active' => true],
+            ['name' => 'work_orders', 'display_name' => 'Work Orders', 'icon' => 'fas fa-tasks', 'is_active' => true],
         ];
 
         foreach ($modules as $module) {

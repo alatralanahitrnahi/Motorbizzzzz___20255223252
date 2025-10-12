@@ -127,6 +127,23 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('edit-quality', function (User $user) {
             return $user->isAdmin() || $user->canEditModule('quality_analysis');
         });
+
+        // Machine and Work Order permissions
+        Gate::define('view-machines', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('machines');
+        });
+
+        Gate::define('view-work-orders', function (User $user) {
+            return $user->isAdmin() || $user->canViewModule('work_orders');
+        });
+
+        Gate::define('edit-machines', function (User $user) {
+            return $user->isAdmin() || $user->canEditModule('machines');
+        });
+
+        Gate::define('edit-work-orders', function (User $user) {
+            return $user->isAdmin() || $user->canEditModule('work_orders');
+        });
       
   
 }

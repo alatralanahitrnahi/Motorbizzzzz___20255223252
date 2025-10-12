@@ -260,6 +260,36 @@ body.user-role.no-delete-vendors form[action*="vendors"][action*="destroy"] { di
                     </li>
                 @endcan
 
+                {{-- Machines --}}
+                @can('view-machines')
+                    @if(!isset($workshop_section))
+                        <li class="nav-item">
+                            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">WORKSHOP</h6>
+                        </li>
+                        @php $workshop_section = true; @endphp
+                    @endif
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('machines.*') ? 'active' : '' }}" href="{{ route('machines.index') }}">
+                            <i class="fas fa-cogs"></i> Machines
+                        </a>
+                    </li>
+                @endcan
+
+                {{-- Work Orders --}}
+                @can('view-work-orders')
+                    @if(!isset($workshop_section))
+                        <li class="nav-item">
+                            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">WORKSHOP</h6>
+                        </li>
+                        @php $workshop_section = true; @endphp
+                    @endif
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('work-orders.*') ? 'active' : '' }}" href="{{ route('work-orders.index') }}">
+                            <i class="fas fa-tasks"></i> Work Orders
+                        </a>
+                    </li>
+                @endcan
+
                 {{-- Reports --}}
                 @can('view-reports')
                     <li class="nav-item">

@@ -172,6 +172,19 @@ Route::middleware(['auth'])->group(function () {
     // Location API
     Route::get('/locations/states', [LocationController::class, 'getStates'])->name('locations.states');
     Route::get('/locations/cities/{state_id}', [LocationController::class, 'getCities'])->name('locations.cities');
+    
+    // Machines
+    Route::resource('machines', \App\Http\Controllers\MachineController::class);
+    
+    // Work Orders
+    Route::prefix('work-orders')->name('work-orders.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\WorkOrderController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\WorkOrderController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\WorkOrderController::class, 'store'])->name('store');
+        Route::get('/{workOrder}', [\App\Http\Controllers\WorkOrderController::class, 'show'])->name('show');
+        Route::post('/{workOrder}/start', [\App\Http\Controllers\WorkOrderController::class, 'start'])->name('start');
+        Route::post('/{workOrder}/complete', [\App\Http\Controllers\WorkOrderController::class, 'complete'])->name('complete');
+    });
 });
 
 // Fallback route for 404 errors
