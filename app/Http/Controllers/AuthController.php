@@ -47,9 +47,9 @@ class AuthController extends Controller
             ? response()->json([
                 'success' => true,
                 'message' => 'Login successful.',
-               'redirect' => route('dashboard')
+               'redirect' => config('app.url') . '/dashboard'
             ])
-            : redirect()->route('dashboard');
+            : redirect(config('app.url') . '/dashboard');
     }
 
     /**
@@ -95,14 +95,7 @@ class AuthController extends Controller
      */
     private function getRedirectUrl(User $user = null)
     {
-        $user = $user ?? Auth::user();
-
-        return match ($user->role) {
-            'admin' => route('dashboard.users'),
-            'purchase_team' => route('dashboard', ['tab' => 'purchases']),
-            'inventory_manager' => route('dashboard', ['tab' => 'inventory']),
-            default => route('dashboard'),
-        };
+        return route('dashboard');
     }
 
     /**

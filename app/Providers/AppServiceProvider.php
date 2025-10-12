@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use App\Models\Warehouse;
 use App\Models\Module;
 use App\Models\PurchaseOrder;
@@ -20,6 +21,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Force URL generation without port
+        URL::forceRootUrl(config('app.url'));
+        if (request()->isSecure()) {
+            URL::forceScheme('https');
+        }
+        
         // 1. Register observer
         PurchaseOrder::observe(PurchaseOrderObserver::class);
 
@@ -34,19 +41,21 @@ class AppServiceProvider extends ServiceProvider
             $navigationItems = [];
 
             if ($user) {
-                $modules = Module::where('is_active', 1)->get();
-
-                foreach ($modules as $module) {
-                    $permission = $this->getPermissionFromRoute($module->route);
-
-                    if ($this->userHasPermission($user, $permission)) {
-                        $navigationItems[$permission] = [
-                            'title' => $module->name,
-                            'route' => $module->route,
-                            'icon' => $module->icon,
-                            'section' => $this->getSectionName($module->route),
-                        ];
+                try {
+                    $modules = Module::where('is_active', 1)->get();
+                    foreach ($modules as $module) {
+                        $permission = $this->getPermissionFromRoute($module->route);
+                        if ($this->userHasPermission($user, $permission)) {
+                            $navigationItems[$permission] = [
+                                'title' => $module->name,
+                                'route' => $module->route,
+                                'icon' => $module->icon,
+                                'section' => $this->getSectionName($module->route),
+                            ];
+                        }
                     }
+                } catch (\Exception $e) {
+                    // Modules table doesn't exist, use default navigation
                 }
 
                 // Always show dashboard
@@ -55,14 +64,6 @@ class AppServiceProvider extends ServiceProvider
                     'route' => 'dashboard',
                     'icon' => 'fas fa-tachometer-alt',
                     'section' => 'Home',
-                ];
-
-                // Always show reports
-                $navigationItems['reports'] = [
-                    'title' => 'Reports',
-                    'route' => 'reports.index',
-                    'icon' => 'fas fa-file-alt',
-                    'section' => 'Reports',
                 ];
             }
 

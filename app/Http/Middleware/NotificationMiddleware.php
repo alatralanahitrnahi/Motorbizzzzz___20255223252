@@ -5,8 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
-use App\Models\MaterialRequest;
-
 class NotificationMiddleware
 {
     public function handle(Request $request, Closure $next)
@@ -19,16 +17,7 @@ class NotificationMiddleware
                 ->count();
 
             View::share('unreadNotificationCount', $unreadCount);
-
-            // Share pending material requests (for admin only)
-            if (auth()->user()->isAdmin()) {
-                $pendingMaterials = MaterialRequest::with('requestedBy')
-                    ->where('resolved', false)
-                    ->latest()
-                    ->get();
-
-                View::share('pendingMaterials', $pendingMaterials);
-            }
+            View::share('pendingMaterials', collect());
         }
 
         return $next($request);

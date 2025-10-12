@@ -26,13 +26,22 @@ use App\Http\Controllers\LocationController;
 
 // Home route
 Route::get('/', function () {
-    return redirect('/login');
+    return view('welcome');
 })->name('home');
+
+// Registration routes
+Route::get('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])->name('register');
+Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'store']);
 
 // Authentication routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Email verification routes (simplified)
+Route::post('/email/verification-notification', function () {
+    return redirect()->back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
 
 // CSRF Refresh Route
 Route::get('/refresh-csrf', function () {

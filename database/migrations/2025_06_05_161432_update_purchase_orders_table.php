@@ -9,40 +9,49 @@ return new class extends Migration
     public function up()
     {
         Schema::table('purchase_orders', function (Blueprint $table) {
-            // Rename po_number to purchase_id
-            $table->renameColumn('po_number', 'purchase_id');
-
-            // Add new columns
-            $table->string('supplier_contact')->nullable()->after('vendor_id');
-            $table->decimal('gst_amount', 10, 2)->default(0)->after('total_amount');
-            $table->decimal('final_amount', 12, 2)->default(0)->after('gst_amount');
-            $table->enum('payment_mode', ['cash', 'bank_transfer', 'cheque', 'credit'])->after('final_amount');
-            $table->integer('credit_days')->nullable()->after('payment_mode');
-          $table->date('order_date')->nullable()->after('credit_days');
-            $table->date('expected_delivery')->nullable()->after('order_date');
-
-            // Add new status values using enum workaround (depends on DB)
-            $table->enum('status', ['pending', 'approved', 'received', 'completed', 'cancelled'])->default('pending')->change();
+            // Check if columns don't exist before adding
+            if (!Schema::hasColumn('purchase_orders', 'supplier_contact')) {
+                $table->string('supplier_contact')->nullable();
+            }
+            if (!Schema::hasColumn('purchase_orders', 'gst_amount')) {
+                $table->decimal('gst_amount', 10, 2)->default(0);
+            }
+            if (!Schema::hasColumn('purchase_orders', 'final_amount')) {
+                $table->decimal('final_amount', 12, 2)->default(0);
+            }
+            if (!Schema::hasColumn('purchase_orders', 'payment_mode')) {
+                $table->string('payment_mode')->nullable(); // Use string instead of enum
+            }
+            if (!Schema::hasColumn('purchase_orders', 'credit_days')) {
+                $table->integer('credit_days')->nullable();
+            }
+            if (!Schema::hasColumn('purchase_orders', 'order_date')) {
+                $table->date('order_date')->nullable();
+            }
+            if (!Schema::hasColumn('purchase_orders', 'expected_delivery')) {
+                $table->date('expected_delivery')->nullable();
+            }
         });
     }
 
     public function down()
     {
         Schema::table('purchase_orders', function (Blueprint $table) {
-            $table->renameColumn('purchase_id', 'po_number');
-
-            $table->dropColumn([
+            $columnsToCheck = [
                 'supplier_contact',
-                'gst_amount',
+                'gst_amount', 
                 'final_amount',
                 'payment_mode',
                 'credit_days',
                 'order_date',
                 'expected_delivery',
-            ]);
-
-            // Restore original status values
-            $table->enum('status', ['pending', 'approved', 'received', 'cancelled'])->default('pending')->change();
+            ];
+            
+            foreach ($columnsToCheck as $column) {
+                if (Schema::hasColumn('purchase_orders', $column)) {
+                    $table->dropColumn($column);
+                }
+            }
         });
     }
 };

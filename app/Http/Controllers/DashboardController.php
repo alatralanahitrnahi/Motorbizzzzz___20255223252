@@ -8,7 +8,7 @@ use App\Models\Vendor;
 use App\Models\InventoryBatch;
 use App\Models\PurchaseOrder;
 use App\Models\Warehouse;
-use App\Models\MaterialRequest;
+
 use App\Models\QualityAnalysis;
 use App\Models\BarcodeLog;
 use App\Models\StockMovement;
@@ -55,20 +55,9 @@ class DashboardController extends Controller
             
             // Fetch pending material requests (Admin or Inventory Manager only)
             $pendingMaterials = collect();
-            if ($user->isAdmin() || $user->isInventoryManager()) {
-                $pendingMaterials = MaterialRequest::where('resolved', false)
-                    ->with('requestedBy')
-                    ->latest()
-                    ->take(5)
-                    ->get();
-            }
             
-            return view('dashboard.index', compact(
-                'user',
-                'stats',
-                'pendingMaterials',
-                'navigationItems',
-                'sidebarModules' // ✅ Pass it to the view
+            return view('dashboard', compact(
+                'stats'
             ));
         } catch (\Exception $e) {
             Log::error('Dashboard error: ' . $e->getMessage());
@@ -124,12 +113,17 @@ class DashboardController extends Controller
     private function getDashboardStats($user)
     {
         try {
-            $stats = match ($user->role) {
-                'admin' => $this->getAdminStats(),
-                'purchase_team' => $this->getPurchaseTeamStats(),
-                'inventory_manager' => $this->getInventoryManagerStats(),
-                default => $this->getDefaultUserStats($user),
-            };
+            $businessId = $user->business_id;
+            
+            // Get basic stats for multi-tenant context
+            $stats = [
+                'materials' => \App\Models\Material::where('business_id', $businessId)->count(),
+                'vendors' => \App\Models\Vendor::where('business_id', $businessId)->count(),
+                'purchase_orders' => \App\Models\PurchaseOrder::where('business_id', $businessId)->count(),
+                'machines' => \App\Models\Machine::where('business_id', $businessId)->count(),
+                'work_orders' => \App\Models\WorkOrder::where('business_id', $businessId)->count(),
+                'invoices' => \App\Models\Invoice::where('business_id', $businessId)->count(),
+            ];
 
             $stats['user_role'] = $user->getRoleDisplayName();
             $stats['last_login'] = $user->last_login_at?->diffForHumans() ?? 'First time login';
@@ -139,6 +133,18 @@ class DashboardController extends Controller
             Log::error('Error generating dashboard stats: ' . $e->getMessage());
             return $this->getEmptyStats($user);
         }
+    }
+    
+    private function getDefaultUserStats($user): array
+    {
+        $businessId = $user->business_id;
+        
+        return [
+            'materials' => \App\Models\Material::where('business_id', $businessId)->count(),
+            'vendors' => \App\Models\Vendor::where('business_id', $businessId)->count(),
+            'purchase_orders' => \App\Models\PurchaseOrder::where('business_id', $businessId)->count(),
+            'machines' => \App\Models\Machine::where('business_id', $businessId)->count(),
+        ];
     }
 
 
@@ -233,7 +239,7 @@ private function getInventoryManagerStats(): array
                 ->where('updated_at', '>', DB::raw('created_at'))
                 ->count(),
             'total_warehouses' => Warehouse::count(),
-            'pending_material_requests' => MaterialRequest::where('resolved', false)->count(),
+            'pending_material_requests' => 0,
         ];
 
         // Debug logging

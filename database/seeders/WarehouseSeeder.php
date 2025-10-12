@@ -13,7 +13,7 @@ class WarehouseSeeder extends Seeder
     public function run(): void
     {
         // Optionally clear existing records
-Warehouse::query()->delete();
+        Warehouse::truncate();
 
         Warehouse::create([
             'name' => 'Mumbai Central Warehouse',
@@ -34,7 +34,7 @@ Warehouse::query()->delete();
             'state' => 'Delhi',
             'contact_phone' => '9123456789',
             'contact_email' => 'delhi@warehouse.in',
-            'type' => 'storage',
+            'type' => 'main',
             'is_default' => false,
             'is_active' => true,
         ]);
@@ -48,7 +48,7 @@ Warehouse::query()->delete();
             'contact_email' => 'bangalore@warehouse.in',
             'type' => 'temporary',
             'is_default' => false,
-            'is_active' => false,
+            'is_active' => false
         ]);
     }
 }

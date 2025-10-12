@@ -508,7 +508,7 @@
             <!-- Error Display Section -->
             <div id="errorAlert" class="alert alert-danger" style="display: none;"></div>
 
-            <form method="POST" action="{{ route('login') }}" id="loginForm" class="login-form">
+            <form method="POST" action="{{ config('app.url') }}/login" id="loginForm" class="login-form">
                 @csrf
                 
                 <div class="form-group">
@@ -582,57 +582,7 @@ $.ajaxSetup({
 // Alternative for vanilla JS fetch requests
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-// LOGIN FORM HANDLER
-document.addEventListener('DOMContentLoaded', function() {
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const spinner = submitBtn.querySelector('.spinner-border');
-            const formData = new FormData(this);
-            
-            // Show loading state
-            submitBtn.disabled = true;
-            if (spinner) spinner.classList.remove('d-none');
-            
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json().catch(() => {
-                        // If not JSON, it might be a redirect
-                        window.location.href = response.url || '/dashboard';
-                    });
-                }
-                throw new Error('Login failed');
-            })
-            .then(data => {
-                if (data && data.redirect) {
-                    window.location.href = data.redirect;
-                } else {
-                    window.location.href = '/dashboard';
-                }
-            })
-            .catch(error => {
-                console.error('Login error:', error);
-                // Show error message
-                showToast('Error', 'Login failed. Please check your credentials.', 'error');
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-                if (spinner) spinner.classList.add('d-none');
-            });
-        });
-    }
-});
+// Allow normal form submission - no JavaScript override
 
 // IMPROVED CSRF TOKEN GETTER
 function getCSRFToken() {

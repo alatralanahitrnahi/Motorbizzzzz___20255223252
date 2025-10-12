@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -195,32 +196,7 @@ class User extends Authenticatable
  */
 public function getSidebarModules()
 {
-    try {
-        // Admin users have access to all active modules
-        if ($this->isAdmin()) {
-            return Module::where('is_active', true)->orderBy('name')->get();
-        }
-
-        // For non-admin users, get only modules they have permissions for
-        $moduleIds = $this->permissions()
-            ->where('can_view', true)
-            ->pluck('module_id')
-            ->toArray();
-
-        if (empty($moduleIds)) {
-            // If no permissions found, return empty collection
-            // The controller will handle default permissions
-            return collect();
-        }
-
-        return Module::whereIn('id', $moduleIds)
-            ->where('is_active', true)
-            ->orderBy('name')
-            ->get();
-    } catch (\Exception $e) {
-        Log::error("Error getting sidebar modules for user {$this->email}: " . $e->getMessage());
-        return collect();
-    }
+    return collect();
 }
 
 /**

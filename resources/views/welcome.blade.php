@@ -3,292 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Pro - Comprehensive Inventory Management System</title>
+    <title>Monitorbizz - Manufacturing Management for SMEs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 100px 0;
-            min-height: 70vh;
-            display: flex;
-            align-items: center;
-        }
-        .feature-card {
-            border: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            height: 100%;
-        }
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-        .feature-icon {
-            font-size: 3rem;
-            color: #667eea;
-            margin-bottom: 1rem;
-        }
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 1.5rem;
-        }
-        .btn-get-started {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            padding: 12px 30px;
-            font-weight: bold;
-            border-radius: 50px;
-        }
-        .stats-section {
-            background: #f8f9fa;
-            padding: 80px 0;
-        }
-        .stat-number {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-    </style>
 </head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">
-                <i class="fas fa-boxes text-primary"></i> Inventory Pro
-            </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#features">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact">Contact</a>
-                    </li>
-                    <li class="nav-item ms-3">
-                        <a class="btn btn-outline-primary" href="{{ route('login') }}">
-                            <i class="fas fa-sign-in-alt"></i> Login
-                        </a>
-                    </li>
-                </ul>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-blue-600">Monitorbizz</h1>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="{{ route('login') }}" class="text-gray-600 hover:text-blue-600">Login</a>
+                    <a href="{{ route('register') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get Started</a>
+                </div>
             </div>
         </div>
-    </nav>
+    </header>
 
     <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h1 class="display-4 fw-bold mb-4">
-                        Comprehensive Inventory Management System
-                    </h1>
-                    <p class="lead mb-5">
-                        Streamline your inventory operations with our powerful, role-based management system. 
-                        Perfect for businesses of all sizes looking to optimize their stock management.
-                    </p>
-                    <div class="d-flex gap-3">
-                        <a href="{{ route('login') }}" class="btn btn-light btn-lg btn-get-started">
-                            <i class="fas fa-rocket"></i> Get Started
-                        </a>
-                        <a href="#features" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-info-circle"></i> Learn More
-                        </a>
-                    </div>
+    <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl font-bold mb-6">Still writing job details on paper? It's 2025.</h1>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">Monitorbizz helps small manufacturers replace clipboards, notebooks, and messy Excel sheets — with a simple app that fits on your phone.</p>
+            <a href="{{ route('register') }}" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition">Start Your Free Workshop</a>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">What Every Shop Needs</h2>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="text-blue-600 text-3xl mb-4"><i class="fas fa-boxes"></i></div>
+                    <h3 class="text-xl font-semibold mb-2">Items & Products</h3>
+                    <p class="text-gray-600">List your raw materials, finished goods, spare parts</p>
                 </div>
-                <div class="col-lg-6">
-                    <div class="text-center">
-                        <i class="fas fa-warehouse" style="font-size: 15rem; opacity: 0.3;"></i>
-                    </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="text-blue-600 text-3xl mb-4"><i class="fas fa-shopping-cart"></i></div>
+                    <h3 class="text-xl font-semibold mb-2">Purchase Orders</h3>
+                    <p class="text-gray-600">Order steel, wood, paint, screws digitally</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="text-blue-600 text-3xl mb-4"><i class="fas fa-file-invoice"></i></div>
+                    <h3 class="text-xl font-semibold mb-2">Invoices & Quotes</h3>
+                    <p class="text-gray-600">Bill customers, send professional quotes</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="text-blue-600 text-3xl mb-4"><i class="fas fa-cogs"></i></div>
+                    <h3 class="text-xl font-semibold mb-2">Machines</h3>
+                    <p class="text-gray-600">Register every machine: CNC, lathe, welding setup</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="text-blue-600 text-3xl mb-4"><i class="fas fa-clipboard-list"></i></div>
+                    <h3 class="text-xl font-semibold mb-2">Work Orders</h3>
+                    <p class="text-gray-600">Digital job cards. No more lost paper slips</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="text-blue-600 text-3xl mb-4"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="text-xl font-semibold mb-2">Dashboard</h3>
+                    <p class="text-gray-600">See sales, stock, pending work at a glance</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="py-5">
-        <div class="container">
-            <div class="row text-center mb-5">
-                <div class="col-12">
-                    <h2 class="display-5 fw-bold mb-3">Powerful Features</h2>
-                    <p class="lead">Everything you need to manage your inventory efficiently</p>
-                </div>
-            </div>
-            
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card feature-card p-4 text-center">
-                        <div class="feature-icon">
-                            <i class="fas fa-users-cog"></i>
-                        </div>
-                        <h4>Role-Based Access</h4>
-                        <p class="text-muted">
-                            Admin, Purchase Team, and Inventory Manager roles with 
-                            specific permissions and access levels.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="card feature-card p-4 text-center">
-                        <div class="feature-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <h4>Real-time Analytics</h4>
-                        <p class="text-muted">
-                            Get instant insights into your inventory levels, 
-                            stock movements, and business performance.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="card feature-card p-4 text-center">
-                        <div class="feature-icon">
-                            <i class="fas fa-mobile-alt"></i>
-                        </div>
-                        <h4>Mobile Responsive</h4>
-                        <p class="text-muted">
-                            Access your inventory system from anywhere, 
-                            on any device with our responsive design.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="card feature-card p-4 text-center">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h4>Secure & Reliable</h4>
-                        <p class="text-muted">
-                            Enterprise-grade security with encrypted data 
-                            and regular automated backups.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="card feature-card p-4 text-center">
-                        <div class="feature-icon">
-                            <i class="fas fa-bell"></i>
-                        </div>
-                        <h4>Smart Alerts</h4>
-                        <p class="text-muted">
-                            Get notified about low stock levels, expiring items, 
-                            and important inventory events.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="card feature-card p-4 text-center">
-                        <div class="feature-icon">
-                            <i class="fas fa-cogs"></i>
-                        </div>
-                        <h4>Easy Integration</h4>
-                        <p class="text-muted">
-                            Seamlessly integrate with your existing systems 
-                            and third-party applications.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="stats-section">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md-3">
-                    <div class="stat-number">99.9%</div>
-                    <p class="text-muted">Uptime</p>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-number">500+</div>
-                    <p class="text-muted">Happy Clients</p>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-number">1M+</div>
-                    <p class="text-muted">Items Managed</p>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-number">24/7</div>
-                    <p class="text-muted">Support</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-5">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h2 class="display-5 fw-bold mb-4">About Inventory Pro</h2>
-                    <p class="lead mb-4">
-                        Built for modern businesses that need reliable, scalable inventory management solutions.
-                    </p>
-                    <p class="mb-4">
-                        Our system provides comprehensive tools for tracking stock levels, managing suppliers, 
-                        processing purchase orders, and generating detailed reports. With role-based access control, 
-                        your team can work efficiently while maintaining security and data integrity.
-                    </p>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Multi-location inventory tracking</li>
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Automated reorder points</li>
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Comprehensive reporting</li>
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Supplier management</li>
-                    </ul>
-                </div>
-                <div class="col-lg-6">
-                    <div class="text-center">
-                        <i class="fas fa-clipboard-list" style="font-size: 12rem; color: #667eea; opacity: 0.2;"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="hero-section">
-        <div class="container text-center">
-            <h2 class="display-5 fw-bold mb-4">Ready to Get Started?</h2>
-            <p class="lead mb-5">Join thousands of businesses already using Inventory Pro</p>
-            <a href="{{ route('login') }}" class="btn btn-light btn-lg btn-get-started">
-                <i class="fas fa-arrow-right"></i> Start Managing Your Inventory
-            </a>
+    <!-- CTA -->
+    <section class="bg-blue-600 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-4">Ready to digitize your workshop?</h2>
+            <p class="text-xl mb-8">Get your own workspace: yourworkshop.monitorbizz.com</p>
+            <a href="{{ route('register') }}" class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition">Start Free Trial</a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5><i class="fas fa-boxes"></i> Inventory Pro</h5>
-                    <p class="text-muted">Comprehensive Inventory Management System</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <p class="text-muted">© 2024 Inventory Pro. All rights reserved.</p>
-                </div>
-            </div>
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 Monitorbizz. Built for workshops, not offices.</p>
         </div>
     </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

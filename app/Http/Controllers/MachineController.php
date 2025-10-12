@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Machine;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class MachineController extends Controller
 {
     public function index()
     {
-        $machines = Machine::with('workOrders')->paginate(10);
+        $machines = Machine::where('business_id', auth()->user()->business_id)->get();
         return view('machines.index', compact('machines'));
     }
 
@@ -23,23 +22,20 @@ class MachineController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:machines',
-            'type' => 'required|in:cnc,lathe,welding,cutting,drilling,milling,other',
-            'location' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
+            'type' => 'required|string|max:100',
+            'model' => 'nullable|string|max:100',
+            'status' => 'required|in:operational,maintenance,down',
         ]);
+
+        $validated['business_id'] = auth()->user()->business_id;
 
         Machine::create($validated);
 
-        return redirect()->route('machines.index')->with('success', 'Machine created successfully.');
+        return redirect()->route('machines.index')->with('success', 'Machine added successfully!');
     }
 
     public function show(Machine $machine)
     {
-        $machine->load(['workOrders' => function($query) {
-            $query->latest()->take(10);
-        }]);
-        
         return view('machines.show', compact('machine'));
     }
 
@@ -52,21 +48,19 @@ class MachineController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:machines,code,' . $machine->id,
-            'type' => 'required|in:cnc,lathe,welding,cutting,drilling,milling,other',
-            'status' => 'required|in:available,in_use,maintenance,broken',
-            'location' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
+            'type' => 'required|string|max:100',
+            'model' => 'nullable|string|max:100',
+            'status' => 'required|in:operational,maintenance,down',
         ]);
 
         $machine->update($validated);
 
-        return redirect()->route('machines.index')->with('success', 'Machine updated successfully.');
+        return redirect()->route('machines.index')->with('success', 'Machine updated successfully!');
     }
 
     public function destroy(Machine $machine)
     {
         $machine->delete();
-        return redirect()->route('machines.index')->with('success', 'Machine deleted successfully.');
+        return redirect()->route('machines.index')->with('success', 'Machine deleted successfully!');
     }
 }

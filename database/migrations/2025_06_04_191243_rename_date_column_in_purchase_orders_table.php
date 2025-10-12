@@ -11,16 +11,22 @@ return new class extends Migration
      */
     public function up()
 {
-    Schema::table('purchase_orders', function (Blueprint $table) {
-        $table->renameColumn('date', 'po_date');
-    });
+    // Check if 'date' column exists before renaming
+    if (Schema::hasColumn('purchase_orders', 'date')) {
+        Schema::table('purchase_orders', function (Blueprint $table) {
+            $table->renameColumn('date', 'po_date');
+        });
+    }
 }
 
 public function down()
 {
-    Schema::table('purchase_orders', function (Blueprint $table) {
-        $table->renameColumn('po_date', 'date');
-    });
+    // Check if 'po_date' column exists before renaming back
+    if (Schema::hasColumn('purchase_orders', 'po_date')) {
+        Schema::table('purchase_orders', function (Blueprint $table) {
+            $table->renameColumn('po_date', 'date');
+        });
+    }
 }
 
 };
