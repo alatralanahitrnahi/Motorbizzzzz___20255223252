@@ -52,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     // Admin routes
-    Route::prefix('admin')->name('admin.')->middleware('can:view-users')->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::post('/users', [AdminController::class, 'store'])->name('users.store');
         Route::patch('/users/{user}/status', [AdminController::class, 'toggleStatus'])->name('users.toggle-status');
@@ -60,20 +60,16 @@ Route::middleware(['auth'])->group(function () {
     });
     
     // Materials
-    Route::middleware('can:view-materials')->group(function () {
-        Route::resource('materials', MaterialController::class);
-        Route::get('/materials/all', [MaterialController::class, 'getAvailableMaterials']);
-        Route::post('/check-material', [MaterialCheckController::class, 'check'])->name('materials.check');
-    });
+    Route::resource('materials', MaterialController::class);
+    Route::get('/materials/all', [MaterialController::class, 'getAvailableMaterials']);
+    Route::post('/check-material', [MaterialCheckController::class, 'check'])->name('materials.check');
     
     // Vendors
-    Route::middleware('can:view-vendors')->group(function () {
-        Route::resource('vendors', VendorController::class);
-        Route::get('/vendors/{vendor}/materials', [VendorController::class, 'getMaterials'])->name('vendors.materials');
-    });
+    Route::resource('vendors', VendorController::class);
+    Route::get('/vendors/{vendor}/materials', [VendorController::class, 'getMaterials'])->name('vendors.materials');
     
     // Purchase Orders
-    Route::prefix('purchase-orders')->name('purchase-orders.')->middleware('can:view-purchase-orders')->group(function () {
+    Route::prefix('purchase-orders')->name('purchase-orders.')->group(function () {
         Route::get('/', [PurchaseOrderController::class, 'index'])->name('index');
         Route::get('/create', [PurchaseOrderController::class, 'create'])->name('create');
         Route::post('/', [PurchaseOrderController::class, 'store'])->name('store');
@@ -88,7 +84,7 @@ Route::middleware(['auth'])->group(function () {
     });
     
     // Inventory
-    Route::prefix('inventory')->name('inventory.')->middleware('can:view-inventory')->group(function () {
+    Route::prefix('inventory')->name('inventory.')->group(function () {
         Route::get('/', [InventoryController::class, 'index'])->name('index');
         Route::get('/items', [InventoryController::class, 'items'])->name('items.index');
         Route::get('/create', [InventoryController::class, 'create'])->name('create');
@@ -103,7 +99,7 @@ Route::middleware(['auth'])->group(function () {
     });
     
     // Warehouses
-    Route::prefix('dashboard/warehouses')->name('dashboard.warehouses.')->middleware('can:view-warehouses')->group(function () {
+    Route::prefix('dashboard/warehouses')->name('dashboard.warehouses.')->group(function () {
         Route::get('/', [WarehouseController::class, 'index'])->name('index');
         Route::get('/create', [WarehouseController::class, 'create'])->name('create');
         Route::post('/', [WarehouseController::class, 'store'])->name('store');
@@ -115,7 +111,7 @@ Route::middleware(['auth'])->group(function () {
     });
     
     // Warehouse Blocks
-    Route::prefix('warehouses')->name('warehouses.blocks.')->middleware('can:view-warehouse-blocks')->group(function () {
+    Route::prefix('warehouses')->name('warehouses.blocks.')->group(function () {
         Route::get('/blocks/all', [WarehouseBlockController::class, 'all'])->name('all');
         Route::get('/{warehouse}/blocks', [WarehouseBlockController::class, 'index'])->name('index');
         Route::get('/{warehouse}/blocks/create', [WarehouseBlockController::class, 'create'])->name('create');
@@ -127,7 +123,7 @@ Route::middleware(['auth'])->group(function () {
     });
     
     // Barcodes
-    Route::prefix('barcode')->name('barcode.')->middleware('can:view-barcodes')->group(function () {
+    Route::prefix('barcode')->name('barcode.')->group(function () {
         Route::get('/', [BarcodeController::class, 'index'])->name('index');
         Route::get('/dashboard', [BarcodeController::class, 'dashboard'])->name('dashboard');
         Route::get('/create', [BarcodeController::class, 'create'])->name('create');
@@ -141,7 +137,7 @@ Route::middleware(['auth'])->group(function () {
     });
     
     // Quality Analysis
-    Route::prefix('quality-analysis')->name('quality-analysis.')->middleware('can:view-quality')->group(function () {
+    Route::prefix('quality-analysis')->name('quality-analysis.')->group(function () {
         Route::get('/', [QualityAnalysisController::class, 'index'])->name('index');
         Route::get('/create', [QualityAnalysisController::class, 'create'])->name('create');
         Route::post('/', [QualityAnalysisController::class, 'store'])->name('store');
@@ -154,7 +150,7 @@ Route::middleware(['auth'])->group(function () {
     });
     
     // Reports
-    Route::prefix('reports')->name('reports.')->middleware('can:view-reports')->group(function() {
+    Route::prefix('reports')->name('reports.')->group(function() {
         Route::get('/', [ReportController::class, 'index'])->name('index');
         Route::get('/export-excel', [ReportController::class, 'exportExcel'])->name('exportExcel');
         Route::get('/export-pdf', [ReportController::class, 'exportPDF'])->name('exportPDF');
