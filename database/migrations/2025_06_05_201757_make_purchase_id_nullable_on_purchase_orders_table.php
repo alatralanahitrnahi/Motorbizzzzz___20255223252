@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Log;
-use Exception;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
@@ -31,7 +30,7 @@ return new class extends Migration
                     $table->dropColumn('purchase_id');
                 });
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Log error but don't fail migration rollback
             Log::warning('Failed to drop purchase_id column: ' . $e->getMessage());
         }

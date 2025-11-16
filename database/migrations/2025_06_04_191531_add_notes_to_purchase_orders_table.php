@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Log;
-use Exception;
 
 return new class extends Migration
 {
@@ -29,7 +28,7 @@ public function down()
                 $table->dropColumn('notes');
             });
         }
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         Log::warning('Failed to drop notes column: ' . $e->getMessage());
     }
 }

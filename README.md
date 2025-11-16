@@ -1,82 +1,95 @@
-# Still writing job details on paper? It's 2025.
+# Monitor Bizz - Manufacturing ERP/CRM System
 
-**Monitorbizz helps small manufacturers replace clipboards, notebooks, and messy Excel sheets — with a simple app that fits on your phone.**
+## Overview
 
-Imagine never losing track of which machine did what job. Never guessing how much material you actually used. Never wondering why your costs keep rising.
+Monitor Bizz is a comprehensive manufacturing ERP/CRM system designed for small to medium-sized manufacturing businesses. The system provides end-to-end functionality for managing customer relationships, inventory, purchasing, manufacturing, and sales processes.
 
-## One Registration. Your Own Space.
+## Documentation Files
 
-Sign up once → Get `yourworkshop.monitorbizz.com`  
-Add your team with roles that make sense:
-- **Owner** - See everything, control everything
-- **Machinist** - Log jobs, report issues  
-- **Inventory Clerk** - Track materials, update stock
-- **Sales Person** - Create quotes, manage orders
+This repository contains the following comprehensive documentation files:
 
-Each person sees only what they need. No confusion.
+1. **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)** - Complete RESTful API documentation with endpoints and examples
+2. **[CRM_MODULE.md](CRM_MODULE.md)** - Detailed documentation of the Customer Relationship Management module
+3. **[INVENTORY_MANAGEMENT.md](INVENTORY_MANAGEMENT.md)** - Comprehensive guide to inventory management features
+4. **[MANUFACTURING_MODULE.md](MANUFACTURING_MODULE.md)** - Detailed documentation of the manufacturing processes and workflows
+5. **[USER_GUIDE.md](USER_GUIDE.md)** - Step-by-step user guide with practical workflows
+6. **[SYSTEM_ARCHITECTURE.md](SYSTEM_ARCHITECTURE.md)** - Technical architecture and multi-tenant implementation details
 
-## What Every Shop Needs
+## Key Features
 
-**📦 Items & Products** - List your raw materials, finished goods, spare parts  
-**🛒 Purchase Orders** - Order steel, wood, paint, screws digitally  
-**📄 Invoices & Quotes** - Bill customers, send professional quotes  
-**💰 Payments** - Track cash, UPI, bank deposits in one place  
-**📊 Dashboard** - See sales, stock, pending work at a glance  
+### CRM (Customer Relationship Management)
+- Lead management and conversion
+- Customer profile management
+- Quotation creation and management
+- Sales order processing
+- Relationship tracking between leads, customers, quotations, and orders
 
-## What Makers Actually Struggle With
+### Inventory Management
+- Multi-type inventory classification (raw materials, components, consumables, spare parts)
+- Multi-location tracking (warehouse, shop floor, storage areas)
+- Stock reservation system to prevent overselling
+- Batch/lot tracking for quality control
+- Real-time stock updates and movement history
 
-**🏭 Machines** - Register every machine: CNC, lathe, welding setup, injection molder  
-**⚙️ Machine Logs** - "Job #2025-001 ran on CNC-02 from 9:15 AM to 2:30 PM, operated by Ravi"  
-**🧪 Material Use** - "This job used 2.3kg Mild Steel + 1.5L Paint" — no more guessing  
-**📉 Waste Tracking** - "5% scrap on Batch #X" — see where money disappears  
-**📋 Work Orders** - Digital job cards. No more lost paper slips  
-**📦 Batch Tracking** - Know which material batch went into which product  
-**🔧 Maintenance** - "Clean CNC filter every 40 hours" — automatic reminders  
-**📏 Yield Calculator** - "92 good pieces out of 100 → 92% yield"  
+### Manufacturing
+- Bill of Materials (BOM) management with wastage tracking
+- Work order planning and execution
+- Material consumption tracking with wastage analysis
+- Production scheduling and resource allocation
+- Quality control with yield percentage calculation
+- Batch production management
 
-## Real Stories
+### Multi-Tenant Architecture
+- Shared database, shared schema approach
+- Complete data isolation between businesses
+- Row-level business ID filtering
+- Scalable and cost-effective implementation
 
-*"Raj's Metal Workshop used to lose 3 hours a week finding which machine did Job #45. Now they log it in 3 taps."*
+## System Requirements
 
-*"Priya's Furniture Shop didn't know why their plywood costs were rising — until Monitorbizz showed 18% waste on cutting tables."*
+### Backend
+- PHP 8.1 or higher
+- Laravel 10.x framework
+- SQLite, MySQL 5.7+, or PostgreSQL 10+
+- Redis (optional for caching and queues)
 
-*"Kumar's Auto Garage stopped writing service details on paper. Now they can find any job from 6 months ago in 10 seconds."*
+### Frontend
+- Modern web browser (Chrome, Firefox, Safari, or Edge)
+- JavaScript enabled
+- Minimum screen resolution of 1024x768
 
-## Start Small. Grow Smart.
+### Infrastructure
+- Web server (Apache or Nginx)
+- Database server
+- SSL certificate for production deployment
 
-Begin with just "Items" and "Work Orders."  
-Add "Machines" when you're ready.  
-Add "Material Tracking" when costs matter more.  
+## API Endpoints
 
-One click to add features. No training needed.
+The system provides a comprehensive RESTful API for integration with external systems. Key endpoint categories include:
 
-## Zoho helps retailers. Monitorbizz helps makers.
+- Authentication: User registration, login, and session management
+- CRM: Leads, customers, quotations, and sales orders
+- Inventory: Materials, products, and location management
+- Manufacturing: BOMs, work orders, and machine management
+- Vendors: Supplier information and purchasing
 
-Built for workshops, not offices.  
-Made for hands that work with tools, not keyboards.  
-Designed for businesses that make things, not just sell them.
+For detailed API documentation, refer to [API_DOCUMENTATION.md](API_DOCUMENTATION.md).
 
----
+## Getting Started
 
-## Installation (For Developers)
+1. Review the [SYSTEM_ARCHITECTURE.md](SYSTEM_ARCHITECTURE.md) for technical implementation details
+2. Follow the installation guide in the main application repository
+3. Use the [USER_GUIDE.md](USER_GUIDE.md) for day-to-day operations
+4. Refer to module-specific documentation for detailed feature information
 
-```bash
-git clone <repository-url>
-cd Motorbizzzzz
-composer install
-npm install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate --seed
-npm run build
-php artisan serve
-```
+## Support and Maintenance
 
-**Tech Stack:** Laravel 10.x, MySQL, Bootstrap
+For support and maintenance information, please contact your system administrator or refer to the support documentation in the main repository.
 
----
+## Contributing
 
-**Stop writing. Start knowing.**  
-**One sign-up. Your tools. Your pace.**
+If you would like to contribute to the Monitor Bizz system or documentation, please follow the contribution guidelines in the main repository.
 
-MIT License
+## License
+
+This documentation is part of the Monitor Bizz system and is subject to the same licensing terms as the main application.

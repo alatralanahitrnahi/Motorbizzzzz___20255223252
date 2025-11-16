@@ -44,6 +44,12 @@ class Material extends Model
         'is_available',
         'dimensions',
         'business_id',
+        'material_type',
+        'reserved_quantity',
+        'stock_status',
+        'location_id',
+        'current_stock',
+        'reorder_level',
     ];
 
     // Cast fields to appropriate data types
@@ -51,8 +57,10 @@ class Material extends Model
         'unit_price'   => 'decimal:2',
         'gst_rate'     => 'decimal:2',
         'is_available' => 'boolean',
-           'dimensions' => 'array',
-
+        'dimensions' => 'array',
+        'reserved_quantity' => 'decimal:2',
+        'current_stock' => 'decimal:2',
+        'reorder_level' => 'decimal:2',
     ];
 
 // In Material.php model
@@ -81,7 +89,6 @@ public function getDimensionsAttribute($value)
     {
         return $this->is_available == 1;
     }
-  
   
 
    public function purchaseOrderItems()
@@ -148,5 +155,40 @@ public function getDimensionsAttribute($value)
         return (float) $this->inventoryBatches()
             ->where('status', 'active')
             ->sum('current_quantity');
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(InventoryLocation::class, 'location_id');
+    }
+
+    public function reserve($quantity)
+    {
+        if (($this->current_stock - $this->reserved_quantity) >= $quantity) {
+            $this->increment('reserved_quantity', $quantity);
+            $this->update(['stock_status' => 'reserved']);
+            return true;
+        }
+        return false;
+    }
+
+    public function unreserve($quantity)
+    {
+        $this->decrement('reserved_quantity', min($quantity, $this->reserved_quantity));
+        
+        if ($this->reserved_quantity == 0) {
+            $this->update(['stock_status' => 'available']);
+        }
+        return true;
+    }
+
+    public function getAvailableQuantity()
+    {
+        return $this->current_stock - $this->reserved_quantity;
+    }
+
+    public function isLowStock()
+    {
+        return $this->current_stock <= $this->reorder_level;
     }
 }
