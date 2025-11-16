@@ -8,98 +8,94 @@ echo "========================================"
 # Set API base URL
 API_BASE="http://localhost:8000/api"
 
-# Login and get token (you'll need to replace with actual credentials)
-echo "Logging in..."
-LOGIN_RESPONSE=$(curl -s -X POST "$API_BASE/login" \
-  -H "Content-Type: application/json" \
-  -d '{"email": "admin@example.com", "password": "password"}')
-
-# Extract token from response
-TOKEN=$(echo $LOGIN_RESPONSE | grep -o '"token":"[^"]*' | grep -o '[^"]*$')
-
-if [ -z "$TOKEN" ]; then
-    echo "Login failed. Exiting."
-    exit 1
-fi
-
-echo "Login successful. Token: $TOKEN"
+echo "Note: This script assumes you have a running Laravel application with the QMS and HR modules installed."
+echo "You'll need to replace the credentials and URLs with your actual values."
 echo ""
 
-# Test QMS Endpoints
-echo "Testing QMS Endpoints..."
-echo "------------------------"
+# Example API calls (commented out since we can't actually run them without a working PHP environment)
 
-# Create Quality Standard
-echo "Creating Quality Standard..."
-curl -s -X POST "$API_BASE/quality-standards" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "ISO 9001:2015",
-    "standard_code": "ISO9001",
-    "description": "Quality management systems standard",
-    "version": "2015"
-  }' | jq '.'
-
+echo "# Example API calls for QMS module:"
+echo ""
+echo "# 1. Create a Quality Standard"
+echo "curl -X POST \$API_BASE/quality-standards \\"
+echo "  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -d '{\"name\": \"ISO 9001:2015\", \"standard_code\": \"ISO9001\", \"description\": \"Quality management systems standard\"}'"
+echo ""
+echo "# 2. Create a Quality Checklist"
+echo "curl -X POST \$API_BASE/quality-checklists \\"
+echo "  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -d '{\"name\": \"Incoming Material Inspection\", \"checklist_type\": \"incoming\", \"description\": \"Checklist for incoming material inspection\"}'"
+echo ""
+echo "# 3. Create a Quality Checklist Item"
+echo "curl -X POST \$API_BASE/quality-checklist-items \\"
+echo "  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -d '{\"quality_checklist_id\": 1, \"item_name\": \"Visual Inspection\", \"criteria_type\": \"pass_fail\", \"description\": \"Check for visible defects\"}'"
+echo ""
+echo "# 4. Create a Quality Inspection"
+echo "curl -X POST \$API_BASE/quality-inspections \\"
+echo "  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -d '{\"quality_checklist_id\": 1, \"inspection_type\": \"incoming\", \"inspection_date\": \"2025-11-16 10:00:00\", \"status\": \"pending\", \"reference_id\": 1, \"reference_type\": \"material\"}'"
+echo ""
+echo "# 5. Record a Quality Inspection Result"
+echo "curl -X POST \$API_BASE/quality-inspection-results \\"
+echo "  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -d '{\"quality_inspection_id\": 1, \"quality_checklist_item_id\": 1, \"result_value\": \"Pass\", \"passed\": true}'"
+echo ""
+echo "# 6. Complete a Quality Inspection"
+echo "curl -X POST \$API_BASE/quality-inspections/1/complete \\"
+echo "  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -d '{\"overall_score\": 95.5, \"passed\": true, \"notes\": \"All items passed inspection\"}'"
 echo ""
 
-# Create Quality Checklist
-echo "Creating Quality Checklist..."
-curl -s -X POST "$API_BASE/quality-checklists" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Incoming Material Inspection",
-    "checklist_type": "incoming",
-    "description": "Checklist for incoming material inspection"
-  }' | jq '.'
-
+echo "# Example API calls for HR module:"
+echo ""
+echo "# 1. Create a Department"
+echo "curl -X POST \$API_BASE/departments \\"
+echo "  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -d '{\"name\": \"Quality Assurance\", \"description\": \"Quality assurance department\"}'"
+echo ""
+echo "# 2. Create a Job Position"
+echo "curl -X POST \$API_BASE/job-positions \\"
+echo "  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -d '{\"department_id\": 1, \"title\": \"Quality Inspector\", \"description\": \"Responsible for quality inspections\", \"employment_type\": \"full_time\", \"min_salary\": 40000, \"max_salary\": 60000}'"
+echo ""
+echo "# 3. Create a Training Program"
+echo "curl -X POST \$API_BASE/training-programs \\"
+echo "  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -d '{\"title\": \"Quality Management Training\", \"description\": \"Training on quality management principles\", \"duration_hours\": 16, \"difficulty_level\": \"intermediate\"}'"
+echo ""
+echo "# 4. Create a Training Material"
+echo "curl -X POST \$API_BASE/training-materials \\"
+echo "  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -d '{\"training_program_id\": 1, \"title\": \"Quality Standards Overview\", \"description\": \"Overview of key quality standards\"}'"
+echo ""
+echo "# 5. Assign Training to Employee"
+echo "curl -X POST \$API_BASE/employee-trainings \\"
+echo "  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -d '{\"user_id\": 1, \"training_program_id\": 1, \"assigned_date\": \"2025-11-16\", \"status\": \"assigned\"}'"
+echo ""
+echo "# 6. Record Skill Assessment"
+echo "curl -X POST \$API_BASE/skill-assessments \\"
+echo "  -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -d '{\"user_id\": 1, \"skill_name\": \"Quality Inspection\", \"proficiency_level\": \"intermediate\", \"assessed_date\": \"2025-11-16\", \"score\": 85.5, \"comments\": \"Good understanding of inspection procedures\"}'"
 echo ""
 
-# Test HR Endpoints
-echo "Testing HR Endpoints..."
-echo "-----------------------"
-
-# Create Department
-echo "Creating Department..."
-curl -s -X POST "$API_BASE/departments" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Quality Assurance",
-    "description": "Quality assurance department"
-  }' | jq '.'
-
+echo "To use these API calls:"
+echo "1. Replace YOUR_ACCESS_TOKEN with a valid API token"
+echo "2. Adjust the IDs and other values as needed"
+echo "3. Run the commands in a terminal with curl installed"
 echo ""
-
-# Create Job Position
-echo "Creating Job Position..."
-curl -s -X POST "$API_BASE/job-positions" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "department_id": 1,
-    "title": "Quality Inspector",
-    "description": "Responsible for quality inspections",
-    "employment_type": "full_time",
-    "min_salary": 40000,
-    "max_salary": 60000
-  }' | jq '.'
-
-echo ""
-
-# Create Training Program
-echo "Creating Training Program..."
-curl -s -X POST "$API_BASE/training-programs" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Quality Management Training",
-    "description": "Training on quality management principles",
-    "duration_hours": 16,
-    "difficulty_level": "intermediate"
-  }' | jq '.'
-
-echo ""
-
-echo "QMS and HR modules test completed!"
+echo "Note: Due to PHP environment issues, we couldn't run the actual migrations."
+echo "Please ensure you run 'php artisan migrate' once the PHP environment is fixed."
