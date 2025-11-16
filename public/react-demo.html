@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MonitorBizz - React Component Test</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: #1976d2;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .component-demo {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MonitorBizz - React Component Test</h1>
+            <p>Testing React components for Compliance & Risk Management</p>
+        </div>
+        
+        <div class="component-demo">
+            <h2>Compliance Requirements Component</h2>
+            <div id="compliance-requirements"></div>
+        </div>
+        
+        <div class="component-demo">
+            <h2>Risk Assessments Component</h2>
+            <div id="risk-assessments"></div>
+        </div>
+    </div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        
+        // Mock data for compliance requirements
+        const mockComplianceRequirements = [
+            { id: 1, name: "GDPR Compliance", category: "Data Protection", status: "active", priority: 1 },
+            { id: 2, name: "ISO 9001", category: "Quality Management", status: "active", priority: 2 },
+            { id: 3, name: "SOX Compliance", category: "Financial", status: "pending", priority: 1 },
+        ];
+        
+        // Mock data for risks
+        const mockRisks = [
+            { id: 1, title: "Data Breach Risk", risk_level: "high", status: "open" },
+            { id: 2, title: "Supply Chain Disruption", risk_level: "medium", status: "mitigated" },
+            { id: 3, title: "Regulatory Changes", risk_level: "low", status: "open" },
+        ];
+        
+        // Simple Compliance Requirements Component
+        function ComplianceRequirements() {
+            const [requirements] = useState(mockComplianceRequirements);
+            
+            return (
+                <div>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <thead>
+                            <tr style={{ backgroundColor: '#f5f5f5' }}>
+                                <th style={{ border: '1px solid #ddd', padding: '8px' }}>Name</th>
+                                <th style={{ border: '1px solid #ddd', padding: '8px' }}>Category</th>
+                                <th style={{ border: '1px solid #ddd', padding: '8px' }}>Status</th>
+                                <th style={{ border: '1px solid #ddd', padding: '8px' }}>Priority</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {requirements.map(req => (
+                                <tr key={req.id}>
+                                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{req.name}</td>
+                                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{req.category}</td>
+                                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+                                        <span style={{
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            backgroundColor: req.status === 'active' ? '#e8f5e9' : '#fff8e1',
+                                            color: req.status === 'active' ? '#2e7d32' : '#f57f17'
+                                        }}>
+                                            {req.status}
+                                        </span>
+                                    </td>
+                                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+                                        <span style={{
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            backgroundColor: req.priority <= 2 ? '#ffebee' : '#e3f2fd',
+                                            color: req.priority <= 2 ? '#c62828' : '#1976d2'
+                                        }}>
+                                            P{req.priority}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            );
+        }
+        
+        // Simple Risk Assessments Component
+        function RiskAssessments() {
+            const [risks] = useState(mockRisks);
+            
+            return (
+                <div>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <thead>
+                            <tr style={{ backgroundColor: '#f5f5f5' }}>
+                                <th style={{ border: '1px solid #ddd', padding: '8px' }}>Risk</th>
+                                <th style={{ border: '1px solid #ddd', padding: '8px' }}>Level</th>
+                                <th style={{ border: '1px solid #ddd', padding: '8px' }}>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {risks.map(risk => (
+                                <tr key={risk.id}>
+                                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{risk.title}</td>
+                                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+                                        <span style={{
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            backgroundColor: risk.risk_level === 'high' ? '#ffebee' : 
+                                                          risk.risk_level === 'medium' ? '#fff8e1' : '#e8f5e9',
+                                            color: risk.risk_level === 'high' ? '#c62828' : 
+                                                  risk.risk_level === 'medium' ? '#f57f17' : '#2e7d32'
+                                        }}>
+                                            {risk.risk_level}
+                                        </span>
+                                    </td>
+                                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+                                        <span style={{
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            backgroundColor: risk.status === 'open' ? '#ffebee' : '#e8f5e9',
+                                            color: risk.status === 'open' ? '#c62828' : '#2e7d32'
+                                        }}>
+                                            {risk.status}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            );
+        }
+        
+        // Render components
+        const complianceRoot = ReactDOM.createRoot(document.getElementById('compliance-requirements'));
+        complianceRoot.render(<ComplianceRequirements />);
+        
+        const riskRoot = ReactDOM.createRoot(document.getElementById('risk-assessments'));
+        riskRoot.render(<RiskAssessments />);
+    </script>
+</body>
+</html>

@@ -24,9 +24,9 @@ use App\Http\Controllers\LocationController;
 |--------------------------------------------------------------------------
 */
 
-// Home route
+// Home route - Serve React app
 Route::get('/', function () {
-    return view('welcome');
+    return view('react-app');
 })->name('home');
 
 // Registration routes
@@ -209,7 +209,12 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+// React app route
+Route::get('/react-app', function () {
+    return view('react-app');
+});
+
 // Fallback route for 404 errors
 Route::fallback(function () {
-    return response()->view('errors.404', [], 404);
+    return response()->view('react-app');
 });
