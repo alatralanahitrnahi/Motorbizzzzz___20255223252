@@ -17,6 +17,19 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\BomController;
 use App\Http\Controllers\Api\WorkOrderController;
 use App\Http\Controllers\Api\InventoryLocationController;
+// QMS Controllers
+use App\Http\Controllers\Api\QualityStandardController;
+use App\Http\Controllers\Api\QualityChecklistController;
+use App\Http\Controllers\Api\QualityChecklistItemController;
+use App\Http\Controllers\Api\QualityInspectionController;
+use App\Http\Controllers\Api\QualityInspectionResultController;
+// HR Controllers
+use App\Http\Controllers\Api\DepartmentController;
+use App\Http\Controllers\Api\JobPositionController;
+use App\Http\Controllers\Api\TrainingProgramController;
+use App\Http\Controllers\Api\TrainingMaterialController;
+use App\Http\Controllers\Api\EmployeeTrainingController;
+use App\Http\Controllers\Api\SkillAssessmentController;
 use App\Models\PurchaseOrder;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -52,6 +65,23 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('work-orders/{id}/consume-material', [WorkOrderController::class, 'consumeMaterial']);
     
     Route::apiResource('inventory-locations', InventoryLocationController::class);
+
+    // QMS Routes
+    Route::apiResource('quality-standards', QualityStandardController::class);
+    Route::apiResource('quality-checklists', QualityChecklistController::class);
+    Route::apiResource('quality-checklist-items', QualityChecklistItemController::class);
+    Route::apiResource('quality-inspections', QualityInspectionController::class);
+    Route::post('quality-inspections/{id}/complete', [QualityInspectionController::class, 'completeInspection']);
+    Route::apiResource('quality-inspection-results', QualityInspectionResultController::class);
+
+    // HR Routes
+    Route::apiResource('departments', DepartmentController::class);
+    Route::apiResource('job-positions', JobPositionController::class);
+    Route::apiResource('training-programs', TrainingProgramController::class);
+    Route::apiResource('training-materials', TrainingMaterialController::class);
+    Route::apiResource('employee-trainings', EmployeeTrainingController::class);
+    Route::post('employee-trainings/{id}/complete', [EmployeeTrainingController::class, 'completeTraining']);
+    Route::apiResource('skill-assessments', SkillAssessmentController::class);
 
     Route::get('/notifications', [NotificationController::class, 'apiIndex']);
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
