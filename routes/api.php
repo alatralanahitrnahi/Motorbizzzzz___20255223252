@@ -30,6 +30,18 @@ use App\Http\Controllers\Api\TrainingProgramController;
 use App\Http\Controllers\Api\TrainingMaterialController;
 use App\Http\Controllers\Api\EmployeeTrainingController;
 use App\Http\Controllers\Api\SkillAssessmentController;
+// Compliance & Risk Management Controllers
+use App\Http\Controllers\Api\ComplianceRequirementController;
+use App\Http\Controllers\Api\ComplianceDocumentController;
+use App\Http\Controllers\Api\ComplianceAuditController;
+use App\Http\Controllers\Api\ComplianceAuditFindingController;
+use App\Http\Controllers\Api\CertificateLicenseController;
+use App\Http\Controllers\Api\RiskCategoryController;
+use App\Http\Controllers\Api\RiskController;
+use App\Http\Controllers\Api\RiskImpactAssessmentController;
+use App\Http\Controllers\Api\RiskMitigationStrategyController;
+use App\Http\Controllers\Api\RiskIncidentController;
+use App\Http\Controllers\Api\BusinessContinuityPlanController;
 use App\Models\PurchaseOrder;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -82,6 +94,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('employee-trainings', EmployeeTrainingController::class);
     Route::post('employee-trainings/{id}/complete', [EmployeeTrainingController::class, 'completeTraining']);
     Route::apiResource('skill-assessments', SkillAssessmentController::class);
+
+    // Compliance Management Routes
+    Route::apiResource('compliance-requirements', ComplianceRequirementController::class);
+    Route::apiResource('compliance-documents', ComplianceDocumentController::class);
+    Route::apiResource('compliance-audits', ComplianceAuditController::class);
+    Route::apiResource('compliance-audit-findings', ComplianceAuditFindingController::class);
+    Route::apiResource('certificates-licenses', CertificateLicenseController::class);
+
+    // Risk Management Routes
+    Route::apiResource('risk-categories', RiskCategoryController::class);
+    Route::apiResource('risks', RiskController::class);
+    Route::apiResource('risk-impact-assessments', RiskImpactAssessmentController::class);
+    Route::apiResource('risk-mitigation-strategies', RiskMitigationStrategyController::class);
+    Route::apiResource('risk-incidents', RiskIncidentController::class);
+    Route::apiResource('business-continuity-plans', BusinessContinuityPlanController::class);
 
     Route::get('/notifications', [NotificationController::class, 'apiIndex']);
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
